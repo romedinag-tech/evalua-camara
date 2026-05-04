@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluador Financiero — Proyecto Buses</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #1a1a24;
+    --bg4: #22222f;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #f0ede8;
+    --text2: #8a8799;
+    --text3: #55536a;
+    --accent: #7fffb2;
+    --accent2: #3de87a;
+    --accent-dim: rgba(127,255,178,0.08);
+    --accent-dim2: rgba(127,255,178,0.15);
+    --warn: #ff8c5a;
+    --warn-dim: rgba(255,140,90,0.1);
+    --blue: #6ec6ff;
+    --blue-dim: rgba(110,198,255,0.1);
+    --gold: #ffd166;
+    --gold-dim: rgba(255,209,102,0.1);
+    --red: #ff5e5e;
+    --red-dim: rgba(255,94,94,0.1);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --font: 'Syne', sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
+
+  html { font-family: var(--font); background: var(--bg); color: var(--text); font-size: 15px; }
+
+  body {
+    min-height: 100vh;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% -10%, rgba(127,255,178,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 110%, rgba(110,198,255,0.04) 0%, transparent 60%),
+      var(--bg);
+  }
+
+  /* LAYOUT */
+  .page { max-width: 1280px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* HEADER */
+  header {
+    padding: 48px 0 40px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .header-left {}
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 1px;
+    background: var(--accent);
+  }
+  h1 {
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+  h1 span { color: var(--accent); }
+  .header-sub {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--text2);
+    font-weight: 400;
+    max-width: 420px;
+    line-height: 1.6;
+  }
+  .header-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent-dim);
+    border: 1px solid rgba(127,255,178,0.2);
+    border-radius: 100px;
+    padding: 8px 16px;
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .badge-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2s ease infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  /* MAIN GRID */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  @media (max-width: 900px) { .main-grid { grid-template-columns: 1fr; } }
+
+  /* PANELS */
+  .panel {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .panel-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .panel-icon {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  .panel-title {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text2);
+  }
+
+  /* SLIDERS PANEL */
+  .sliders-wrap { padding: 6px 0 12px; }
+
+  .section-sep {
+    padding: 14px 20px 6px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text3);
+  }
+
+  .slider-item {
+    padding: 10px 20px 14px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  .slider-item:last-child { border-bottom: none; }
+  .slider-item:hover { background: rgba(255,255,255,0.015); }
+
+  .slider-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+  .slider-name {
+    font-size: 13px;
+    color: var(--text2);
+    font-weight: 500;
+  }
+  .slider-val {
+    font-family: var(--mono);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    min-width: 90px;
+    text-align: right;
+  }
+
+  input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--bg4);
+    outline: none;
+    cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg2);
+    box-shadow: 0 0 0 1px rgba(127,255,178,0.3);
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+  input[type=range]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 0 4px rgba(127,255,178,0.15);
+  }
+  input[type=range]:focus::-webkit-slider-thumb {
+    box-shadow: 0 0 0 4px rgba(127,255,178,0.2);
+  }
+  .range-track {
+    position: relative;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--bg4);
+    overflow: visible;
+  }
+  .range-fill {
+    position: absolute;
+    top: 0; left: 0;
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  .slider-limits {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    font-size: 10px;
+    color: var(--text3);
+    font-family: var(--mono);
+  }
+
+  /* RIGHT COLUMN */
+  .right-col { display: flex; flex-direction: column; gap: 20px; }
+
+  /* METRICS */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  @media (max-width: 700px) { .metrics-grid { grid-template-columns: repeat(2,1fr); } }
+
+  .metric-card {
+    background: var(--bg2);
+    padding: 20px 18px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s;
+  }
+  .metric-card:hover { background: var(--bg3); }
+  .metric-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--card-color, transparent);
+    opacity: 0.6;
+  }
+  .metric-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 10px;
+  }
+  .metric-value {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--text);
+    margin-bottom: 6px;
+    transition: color 0.3s;
+  }
+  .metric-sub {
+    font-size: 11px;
+    color: var(--text3);
+    font-family: var(--mono);
+  }
+  .metric-card.is-pos { --card-color: var(--accent); }
+  .metric-card.is-pos .metric-value { color: var(--accent); }
+  .metric-card.is-neg { --card-color: var(--red); }
+  .metric-card.is-neg .metric-value { color: var(--red); }
+  .metric-card.is-warn { --card-color: var(--warn); }
+  .metric-card.is-warn .metric-value { color: var(--warn); }
+  .metric-card.is-blue { --card-color: var(--blue); }
+  .metric-card.is-blue .metric-value { color: var(--blue); }
+
+  /* CHART PANEL */
+  .chart-panel { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); }
+  .chart-panel-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .chart-panel-title { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text2); }
+  .tab-group { display: flex; gap: 4px; }
+  .tab-btn {
+    font-family: var(--font);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border2);
+    background: transparent;
+    color: var(--text3);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.05em;
+  }
+  .tab-btn:hover { color: var(--text2); border-color: var(--border2); background: var(--bg3); }
+  .tab-btn.active { background: var(--accent-dim2); color: var(--accent); border-color: rgba(127,255,178,0.25); }
+
+  .chart-legend {
+    padding: 12px 20px 0;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .leg-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text2); }
+  .leg-dot { width: 20px; height: 2px; border-radius: 1px; }
+  .leg-dot.dashed { background: repeating-linear-gradient(to right, var(--gold) 0, var(--gold) 4px, transparent 4px, transparent 8px); }
+
+  .chart-area { padding: 16px 20px 20px; }
+  .chart-canvas-wrap { position: relative; height: 280px; }
+
+  /* BOTTOM GRID */
+  .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 700px) { .bottom-grid { grid-template-columns: 1fr; } }
+
+  /* TABLE PANEL */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  thead th {
+    padding: 10px 14px;
+    text-align: right;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text3);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  thead th:first-child { text-align: left; }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(255,255,255,0.02); }
+  tbody td {
+    padding: 9px 14px;
+    text-align: right;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text2);
+    white-space: nowrap;
+  }
+  tbody td:first-child { text-align: left; color: var(--text3); }
+  .td-pos { color: var(--accent) !important; }
+  .td-neg { color: var(--red) !important; }
+  .payback-row { background: var(--accent-dim) !important; }
+  .payback-row td { color: var(--accent) !important; }
+
+  /* SCENARIO BADGE */
+  .scenario-panel {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .scenario-title {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 14px;
+  }
+  .scenario-result {
+    padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .scenario-result.viable { background: var(--accent-dim); border: 1px solid rgba(127,255,178,0.15); }
+  .scenario-result.marginal { background: var(--gold-dim); border: 1px solid rgba(255,209,102,0.15); }
+  .scenario-result.inviable { background: var(--red-dim); border: 1px solid rgba(255,94,94,0.15); }
+  .scenario-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .scenario-text h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .scenario-result.viable .scenario-text h3 { color: var(--accent); }
+  .scenario-result.marginal .scenario-text h3 { color: var(--gold); }
+  .scenario-result.inviable .scenario-text h3 { color: var(--red); }
+  .scenario-text p { font-size: 12px; color: var(--text2); line-height: 1.5; }
+
+  .kpi-row { display: flex; flex-direction: column; gap: 8px; }
+  .kpi-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: var(--bg3);
+    border-radius: var(--radius-sm);
+  }
+  .kpi-name { font-size: 12px; color: var(--text2); }
+  .kpi-val { font-family: var(--mono); font-size: 13px; font-weight: 500; }
+
+  /* FOOTER */
+  footer {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 11px;
+    color: var(--text3);
+  }
+
+  /* TRANSITIONS */
+  .metric-value, .slider-val, td { transition: all 0.2s ease; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="header-left">
+      <div class="eyebrow">Evaluación financiera</div>
+      <h1>Proyecto <span>Buses</span><br>Análisis de Rentabilidad</h1>
+      <p class="header-sub">Modifica las variables de negocio y financiamiento para evaluar la viabilidad del proyecto en tiempo real.</p>
+    </div>
+    <div class="header-badge">
+      <span class="badge-dot"></span>
+      Cálculo en tiempo real
+    </div>
+  </header>
+
+  <div class="main-grid">
+
+    <!-- SLIDERS -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-icon" style="background:var(--accent-dim); color:var(--accent)">⚙</div>
+        <span class="panel-title">Variables del proyecto</span>
+      </div>
+      <div class="sliders-wrap">
+
+        <div class="section-sep">Operación</div>
+
+        <div class="slider-item">
+          <div class="slider-top">
+            <span class="slider-name">Flota total de buses</span>
+            <span class="slider-val" id="v-flota">200 buses</span>
+          </div>
+          <input type="range" id="sl-flota" min="50" max="500" step="10" value="200">
+          <div class="slider-limits"><span>50</span><span>500</span></div>
+        </div>
+
+        <div class="slider-item">
+          <div class="slider-top">
+            <span class="slider-name">Plazo del contrato</span>
+            <span class="slider-val" id="v-plazo">24 meses</span>
+          </div>
+          <input type="range" id="sl-plazo" min="6" max="60" step="6" value="24">
+          <div class="slider-limits"><span>6m</span><span>60m</span></div>
+        </div>
+
+        <div class="slider-item">
+          <div class="slider-top">
+            <span class="slider-name">Tarifa por bus / día</span>
+            <span class="slider-val" id="v-tarifa">$4.500</span>
+          </div>
+          <input type="range" id="sl-tarifa" min="1000" max="10000" step="500" value="4500">
+          <div class="slider-limits"><span>$1.000</span><span>$10.000</span></div>
+        </div>
+
+        <div class="slider-item">
+          <div class="slider-top">
+            <span class="slider-name">Días activos por mes</span>
+            <span class="slider-val" id="v-dias">30 días</span>
+          </div>
+          <input type="range" id="sl-dias" min="15" max="30" step="1" value="30">
+          <div class="slider-limits"><span>15</span><span>30</span></div>
+        </div>
+
+        <div class="section-sep">Costos</div>
+
+        <div class="slider-item">
+          <div class="slider-top">
+            <span class="slider-name">OPEX mensual</span>
+            <span class="slider-val" id="v-opex">$9.000.000</span>
+          </div>
+          <input type="range" id="sl-opex" min="3000000" max="20000000" step="500000" value="9000000">
+          <div class="slider-limits"><span>$3M</span><span>$20M</span></div>
+        </div>
+
+        <div class="slider-item">
+          <div class="slider-top">
+            <span class="slider-name">Costo por bus (CAPEX)</span>
+            <span class="slider-val" id="v-capexbus">$746.500</span>
+          </div>
+          <input type="range" id="sl-capexbus" min="300000" max="1500000" step="50000" value="746500">
+          <div class="slider-limits"><span>$300k</span><span>$1.5M</span></div>
+        </div>
+
+        <div class="section-sep">Financiamiento</div>
+
+        <div class="slider-item">
+          <div class="slider-top">
+            <span class="slider-name">Tasa de descuento</span>
+            <span class="slider-val" id="v-tdesc">1,0% / mes</span>
+          </div>
+          <input type="range" id="sl-tdesc" min="1" max="30" step="1" value="10">
+          <div class="slider-limits"><span>1%</span><span>30%</span></div>
+        </div>
+
+        <div class="slider-item">
+          <div class="slider-top">
+            <span class="slider-name">Plazo del crédito</span>
+            <span class="slider-val" id="v-pcred">12 meses</span>
+          </div>
+          <input type="range" id="sl-pcred" min="0" max="48" step="6" value="12">
+          <div class="slider-limits"><span>Sin crédito</span><span>48m</span></div>
+        </div>
+
+        <div class="slider-item">
+          <div class="slider-top">
+            <span class="slider-name">Interés del crédito</span>
+            <span class="slider-val" id="v-icred">30% / año</span>
+          </div>
+          <input type="range" id="sl-icred" min="5" max="60" step="5" value="30">
+          <div class="slider-limits"><span>5%</span><span>60%</span></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="right-col">
+
+      <!-- METRICS -->
+      <div class="metrics-grid">
+        <div class="metric-card" id="mc-van">
+          <div class="metric-label">VAN</div>
+          <div class="metric-value" id="mv-van">—</div>
+          <div class="metric-sub" id="ms-van">Valor actual neto</div>
+        </div>
+        <div class="metric-card" id="mc-tir">
+          <div class="metric-label">TIR</div>
+          <div class="metric-value" id="mv-tir">—</div>
+          <div class="metric-sub" id="ms-tir">Tasa interna retorno</div>
+        </div>
+        <div class="metric-card" id="mc-payback">
+          <div class="metric-label">Payback</div>
+          <div class="metric-value" id="mv-payback">—</div>
+          <div class="metric-sub">Período de recuperación</div>
+        </div>
+        <div class="metric-card is-blue" id="mc-flujo">
+          <div class="metric-label">Flujo neto / mes</div>
+          <div class="metric-value" id="mv-flujo">—</div>
+          <div class="metric-sub" id="ms-flujo">Operación estable</div>
+        </div>
+        <div class="metric-card is-blue">
+          <div class="metric-label">Ingreso mensual</div>
+          <div class="metric-value" id="mv-ingreso">—</div>
+          <div class="metric-sub" id="ms-ingreso">Bruto sin costos</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">CAPEX total</div>
+          <div class="metric-value" id="mv-capex">—</div>
+          <div class="metric-sub">Inversión inicial</div>
+        </div>
+        <div class="metric-card" id="mc-cuota">
+          <div class="metric-label">Cuota crédito / mes</div>
+          <div class="metric-value" id="mv-cuota">—</div>
+          <div class="metric-sub" id="ms-cuota">Sistema francés</div>
+        </div>
+        <div class="metric-card" id="mc-margen">
+          <div class="metric-label">Margen operacional</div>
+          <div class="metric-value" id="mv-margen">—</div>
+          <div class="metric-sub">Sobre ingreso bruto</div>
+        </div>
+      </div>
+
+      <!-- CHART -->
+      <div class="chart-panel">
+        <div class="chart-panel-header">
+          <span class="chart-panel-title">Flujo de caja</span>
+          <div class="tab-group">
+            <button class="tab-btn active" id="tab-acum" onclick="setTab('acum')">Acumulado</button>
+            <button class="tab-btn" id="tab-mens" onclick="setTab('mens')">Mensual</button>
+            <button class="tab-btn" id="tab-van" onclick="setTab('van')">VAN incremental</button>
+          </div>
+        </div>
+        <div class="chart-legend" id="chart-legend"></div>
+        <div class="chart-area">
+          <div class="chart-canvas-wrap">
+            <canvas id="chart-main" role="img" aria-label="Flujo de caja del proyecto"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTTOM -->
+      <div class="bottom-grid">
+
+        <!-- TABLA FLUJOS -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-icon" style="background:var(--blue-dim); color:var(--blue)">≡</div>
+            <span class="panel-title">Tabla de flujos</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mes</th>
+                  <th>Ingreso</th>
+                  <th>Egreso</th>
+                  <th>Flujo</th>
+                  <th>Acumulado</th>
+                </tr>
+              </thead>
+              <tbody id="tabla-flujos"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- DIAGNÓSTICO -->
+        <div class="scenario-panel">
+          <div class="scenario-title">Diagnóstico del proyecto</div>
+          <div id="scenario-box"></div>
+          <div class="kpi-row" id="kpi-row"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span>Evaluador Financiero · Proyecto Buses · Modelo de flujo descontado</span>
+    <span>OPEX fijo + CAPEX variable por bus · Crédito sistema francés</span>
+  </footer>
+
+</div>
+
+<script>
+const DIAS_BASE = 30;
+let activeTab = 'acum';
+let chart = null;
+
+function getVals() {
+  return {
+    flota:    +document.getElementById('sl-flota').value,
+    plazo:    +document.getElementById('sl-plazo').value,
+    tarifa:   +document.getElementById('sl-tarifa').value,
+    dias:     +document.getElementById('sl-dias').value,
+    opex:     +document.getElementById('sl-opex').value,
+    capexBus: +document.getElementById('sl-capexbus').value,
+    tdescPct: +document.getElementById('sl-tdesc').value,
+    pcred:    +document.getElementById('sl-pcred').value,
+    icredPct: +document.getElementById('sl-icred').value,
+  };
+}
+
+function cuotaFrances(P, r, n) {
+  if (n === 0) return 0;
+  if (r < 0.00001) return P / n;
+  return P * r * Math.pow(1+r,n) / (Math.pow(1+r,n)-1);
+}
+
+function calcVAN(flujos, r) {
+  return flujos.reduce((s,f,i) => s + f/Math.pow(1+r,i), 0);
+}
+
+function calcTIR(flujos) {
+  const hasPos = flujos.slice(1).some(f=>f>0);
+  const hasNeg = flujos.some(f=>f<0);
+  if (!hasPos || !hasNeg) return null;
+  let lo = -0.9999, hi = 10;
+  const npv = r => flujos.reduce((s,f,t)=>s+f/Math.pow(1+r,t),0);
+  if (npv(lo)*npv(hi) > 0) return null;
+  for (let i=0;i<300;i++) {
+    const mid=(lo+hi)/2;
+    npv(mid)>0 ? lo=mid : hi=mid;
+    if (Math.abs(hi-lo)<1e-9) break;
+  }
+  return (lo+hi)/2;
+}
+
+function fmtCLP(n, short=false) {
+  const abs = Math.abs(n);
+  let s;
+  if (short) {
+    if (abs>=1e9) s=(abs/1e9).toFixed(1)+'B';
+    else if (abs>=1e6) s=(abs/1e6).toFixed(1)+'M';
+    else if (abs>=1e3) s=(abs/1e3).toFixed(0)+'K';
+    else s=Math.round(abs).toLocaleString('es-CL');
+  } else {
+    if (abs>=1e6) s=(abs/1e6).toFixed(2)+'M';
+    else s=Math.round(abs).toLocaleString('es-CL');
+  }
+  return (n<0?'-':'')+'$'+s;
+}
+
+function setTab(t) {
+  activeTab = t;
+  ['acum','mens','van'].forEach(id=>{
+    document.getElementById('tab-'+id).classList.toggle('active', id===t);
+  });
+  update();
+}
+
+function update() {
+  const v = getVals();
+
+  // Labels update
+  document.getElementById('v-flota').textContent   = v.flota+' buses';
+  document.getElementById('v-plazo').textContent   = v.plazo+' meses';
+  document.getElementById('v-tarifa').textContent  = '$'+v.tarifa.toLocaleString('es-CL');
+  document.getElementById('v-dias').textContent    = v.dias+' días';
+  document.getElementById('v-opex').textContent    = fmtCLP(v.opex,true);
+  document.getElementById('v-capexbus').textContent= '$'+v.capexBus.toLocaleString('es-CL');
+  document.getElementById('v-tdesc').textContent   = (v.tdescPct/10).toFixed(1)+'% / mes';
+  document.getElementById('v-pcred').textContent   = v.pcred===0?'Sin crédito':v.pcred+' meses';
+  document.getElementById('v-icred').textContent   = v.icredPct+'% / año';
+
+  const tDesc   = v.tdescPct / 1000;
+  const tCredMes= Math.pow(1+v.icredPct/100, 1/12)-1;
+  const capex   = v.capexBus * v.flota;
+  const ingresoMes = v.flota * v.tarifa * v.dias;
+  const flujoOpMes = ingresoMes - v.opex;
+  const cuota   = cuotaFrances(capex, tCredMes, v.pcred);
+  const costoCred = v.pcred>0 ? cuota*v.pcred - capex : 0;
+  const margen  = ingresoMes>0 ? flujoOpMes/ingresoMes : 0;
+
+  // Build cash flows
+  const labels=['0'], flujosBase=[-capex], flujosCred=[v.pcred>0?0:-capex];
+  for (let i=1;i<=v.plazo;i++) {
+    labels.push(String(i));
+    flujosBase.push(flujoOpMes);
+    flujosCred.push(flujoOpMes - (i<=v.pcred?cuota:0));
+  }
+
+  const useCred = v.pcred>0;
+  const flujosMain = useCred ? flujosCred : flujosBase;
+
+  const van = calcVAN(flujosMain, tDesc);
+  const tir = calcTIR(flujosMain);
+  const tirBase = calcTIR(flujosBase);
+
+  // Payback
+  let payback=null, cumPb=useCred?0:-capex;
+  for (let i=1;i<=v.plazo;i++) {
+    cumPb += flujosMain[i];
+    if (cumPb>=0 && payback===null) { payback=i; break; }
+  }
+
+  // Acumulados
+  const acumBase=[], acumCred=[];
+  let cb=0, cc=0;
+  for (let i=0;i<flujosBase.length;i++) {
+    cb+=flujosBase[i]; acumBase.push(cb);
+    cc+=flujosCred[i]; acumCred.push(cc);
+  }
+
+  // VAN incremental
+  const vanIncr=[];
+  let vanAcum=flujosMain[0];
+  vanIncr.push(flujosMain[0]);
+  for (let i=1;i<flujosMain.length;i++) {
+    vanAcum += flujosMain[i]/Math.pow(1+tDesc,i);
+    vanIncr.push(vanAcum);
+  }
+
+  // ---- METRICS ----
+  const vanEl = document.getElementById('mv-van');
+  vanEl.textContent = fmtCLP(van,true);
+  const mcVan = document.getElementById('mc-van');
+  mcVan.className = 'metric-card '+(van>0?'is-pos':van<0?'is-neg':'');
+
+  const tirEl = document.getElementById('mv-tir');
+  if (tir!==null) {
+    const tirAnual = (Math.pow(1+tir,12)-1)*100;
+    tirEl.textContent = tirAnual.toFixed(1)+'%/año';
+    document.getElementById('ms-tir').textContent = (tir*100).toFixed(2)+'%/mes';
+    document.getElementById('mc-tir').className = 'metric-card '+(tir>tDesc?'is-pos':tir>0?'is-warn':'is-neg');
+  } else {
+    tirEl.textContent = 'N/A';
+    document.getElementById('mc-tir').className = 'metric-card is-neg';
+  }
+
+  const pbEl = document.getElementById('mv-payback');
+  if (payback) {
+    pbEl.textContent = payback+' meses';
+    document.getElementById('mc-payback').className = 'metric-card '+(payback<=v.plazo/2?'is-pos':payback<=v.plazo?'is-warn':'is-neg');
+  } else {
+    pbEl.textContent = '>'+v.plazo+'m';
+    document.getElementById('mc-payback').className = 'metric-card is-neg';
+  }
+
+  document.getElementById('mv-flujo').textContent = fmtCLP(flujoOpMes,true);
+  document.getElementById('ms-flujo').textContent = 'Ingreso − OPEX';
+  document.getElementById('mc-flujo').className = 'metric-card '+(flujoOpMes>=0?'is-pos':'is-neg');
+
+  document.getElementById('mv-ingreso').textContent = fmtCLP(ingresoMes,true);
+  document.getElementById('ms-ingreso').textContent = v.flota+'b × $'+v.tarifa.toLocaleString('es-CL')+' × '+v.dias+'d';
+
+  document.getElementById('mv-capex').textContent = fmtCLP(capex,true);
+
+  const cuotaEl = document.getElementById('mv-cuota');
+  cuotaEl.textContent = useCred ? fmtCLP(cuota,true) : '—';
+  document.getElementById('ms-cuota').textContent = useCred ? 'Costo total: '+fmtCLP(costoCred,true) : 'Sin financiamiento';
+  document.getElementById('mc-cuota').className = 'metric-card '+(useCred?'is-warn':'');
+
+  document.getElementById('mv-margen').textContent = (margen*100).toFixed(1)+'%';
+  document.getElementById('mc-margen').className = 'metric-card '+(margen>0.3?'is-pos':margen>0?'is-warn':'is-neg');
+
+  // ---- CHART ----
+  let datasets=[], legendHtml='';
+  const GREEN='#7fffb2', GOLD='#ffd166', RED='#ff5e5e', BLUE='#6ec6ff';
+
+  if (activeTab==='acum') {
+    const baseColors = acumBase.map(v=>v>=0?GREEN:RED);
+    datasets.push({
+      label:'Sin crédito', data:acumBase, type:'line',
+      borderColor:GREEN, backgroundColor:'rgba(127,255,178,0.05)',
+      pointBackgroundColor:baseColors, pointRadius:3, tension:0.35, fill:true, order:2
+    });
+    if (useCred) {
+      datasets.push({
+        label:'Con crédito', data:acumCred, type:'line',
+        borderColor:GOLD, backgroundColor:'rgba(255,209,102,0.04)',
+        borderDash:[5,3], pointBackgroundColor:GOLD, pointRadius:3, tension:0.35, fill:true, order:1
+      });
+    }
+    legendHtml = `<span class="leg-item"><span class="leg-dot" style="background:${GREEN}"></span>Sin crédito</span>`
+      +(useCred?`<span class="leg-item"><span class="leg-dot dashed"></span>Con crédito</span>`:'');
+  } else if (activeTab==='mens') {
+    datasets.push({
+      label:'Flujo mensual', data:flujosMain.map((f,i)=>i===0&&!useCred?null:f), type:'bar',
+      backgroundColor: flujosMain.map(f=>f>=0?'rgba(127,255,178,0.6)':'rgba(255,94,94,0.6)'),
+      borderColor: flujosMain.map(f=>f>=0?GREEN:RED),
+      borderWidth:1, order:1
+    });
+    if (!useCred) datasets[0].data[0] = flujosMain[0];
+    legendHtml = `<span class="leg-item"><span class="leg-dot" style="background:${GREEN}"></span>Flujo positivo</span><span class="leg-item"><span class="leg-dot" style="background:${RED}"></span>Flujo negativo</span>`;
+  } else {
+    datasets.push({
+      label:'VAN acumulado', data:vanIncr, type:'line',
+      borderColor:BLUE, backgroundColor:'rgba(110,198,255,0.06)',
+      pointBackgroundColor:vanIncr.map(v=>v>=0?BLUE:RED),
+      pointRadius:3, tension:0.35, fill:true, order:1
+    });
+    legendHtml = `<span class="leg-item"><span class="leg-dot" style="background:${BLUE}"></span>VAN acumulado descontado</span>`;
+  }
+
+  document.getElementById('chart-legend').innerHTML = legendHtml;
+
+  const chartOpts = {
+    responsive:true, maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{
+        backgroundColor:'rgba(17,17,24,0.95)',
+        borderColor:'rgba(255,255,255,0.08)', borderWidth:1,
+        titleColor:'#8a8799', bodyColor:'#f0ede8',
+        titleFont:{size:11}, bodyFont:{family:"'DM Mono',monospace",size:12},
+        callbacks:{ label: ctx=>' '+fmtCLP(ctx.parsed.y,true) }
+      }
+    },
+    scales:{
+      x:{
+        ticks:{autoSkip:true, maxTicksLimit:13, color:'#55536a', font:{size:11}},
+        grid:{color:'rgba(255,255,255,0.04)'},
+        border:{color:'rgba(255,255,255,0.06)'}
+      },
+      y:{
+        ticks:{color:'#55536a', font:{size:11, family:"'DM Mono',monospace"}, callback: v=>fmtCLP(v,true)},
+        grid:{color:'rgba(255,255,255,0.04)'},
+        border:{color:'rgba(255,255,255,0.06)'}
+      }
+    }
+  };
+
+  if (chart) {
+    chart.data.labels = labels;
+    chart.data.datasets = datasets;
+    chart.options = chartOpts;
+    chart.update('none');
+  } else {
+    chart = new Chart(document.getElementById('chart-main'), {
+      type: activeTab==='mens'?'bar':'line',
+      data:{labels, datasets},
+      options: chartOpts
+    });
+  }
+
+  // ---- TABLA ----
+  const tbody = document.getElementById('tabla-flujos');
+  let rows='', cumAcum=0;
+  const maxRows = Math.min(v.plazo+1, 25);
+  for (let i=0;i<maxRows;i++) {
+    const ingreso = i===0 ? 0 : ingresoMes;
+    const egreso  = i===0 ? (useCred?0:capex)+v.opex : v.opex+(i<=v.pcred?cuota:0);
+    const flujo   = flujosMain[i];
+    cumAcum += flujo;
+    const isPb = payback===i;
+    rows+=`<tr${isPb?' class="payback-row"':''}>
+      <td>${i}</td>
+      <td>${i===0?'—':fmtCLP(ingreso,true)}</td>
+      <td class="td-neg">${fmtCLP(-egreso,true)}</td>
+      <td class="${flujo>=0?'td-pos':'td-neg'}">${fmtCLP(flujo,true)}</td>
+      <td class="${cumAcum>=0?'td-pos':'td-neg'}">${fmtCLP(cumAcum,true)}</td>
+    </tr>`;
+  }
+  if (v.plazo+1>maxRows) rows+=`<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:10px">... ${v.plazo+1-maxRows} meses más</td></tr>`;
+  tbody.innerHTML=rows;
+
+  // ---- DIAGNÓSTICO ----
+  let cls='viable', icon='✓', title='Proyecto viable', desc='';
+  if (van<0 || flujoOpMes<0) { cls='inviable'; icon='✗'; title='Proyecto no viable'; }
+  else if (van<capex*0.2 || (tir!==null&&tir<tDesc)) { cls='marginal'; icon='△'; title='Rentabilidad marginal'; }
+
+  if (cls==='viable') desc=`VAN positivo de ${fmtCLP(van,true)}. La inversión se recupera${payback?' en '+payback+' meses':' dentro del plazo'}. TIR${tir?(' del '+(tir*100).toFixed(2)+'%/mes'):'no calculable'} supera la tasa de descuento.`;
+  else if (cls==='marginal') desc=`El proyecto genera flujos positivos pero el retorno es ajustado. Considera revisar la tarifa o reducir el OPEX para mejorar el margen.`;
+  else desc=`Con las variables actuales el proyecto no recupera la inversión. El flujo operacional ${flujoOpMes<0?'es negativo':'no cubre el CAPEX dentro del plazo'}. Ajusta tarifa, flota o plazo.`;
+
+  document.getElementById('scenario-box').innerHTML=`
+    <div class="scenario-result ${cls}">
+      <div class="scenario-icon">${icon}</div>
+      <div class="scenario-text"><h3>${title}</h3><p>${desc}</p></div>
+    </div>`;
+
+  const kpis=[
+    ['CAPEX / bus', fmtCLP(v.capexBus,false), 'var(--text)'],
+    ['Ingreso / bus / mes', fmtCLP(v.tarifa*v.dias,false), 'var(--blue)'],
+    ['OPEX / bus / mes', fmtCLP(v.opex/v.flota,false), 'var(--warn)'],
+    ['Margen bruto', (margen*100).toFixed(1)+'%', margen>0?'var(--accent)':'var(--red)'],
+    ['Cuota / ingreso', useCred ? ((cuota/ingresoMes)*100).toFixed(1)+'%':'N/A', 'var(--gold)'],
+    ['VAN / CAPEX', (van/capex*100).toFixed(1)+'%', van>0?'var(--accent)':'var(--red)'],
+  ];
+  document.getElementById('kpi-row').innerHTML=kpis.map(([n,val,col])=>`
+    <div class="kpi-item">
+      <span class="kpi-name">${n}</span>
+      <span class="kpi-val" style="color:${col}">${val}</span>
+    </div>`).join('');
+}
+
+// Bind all sliders
+document.querySelectorAll('input[type=range]').forEach(el=>{
+  el.addEventListener('input', update);
+});
+
+update();
+</script>
+</body>
+</html>
