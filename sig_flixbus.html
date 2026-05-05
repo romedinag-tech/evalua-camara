@@ -16,149 +16,144 @@
   --text:#e6edf3;--text2:#8b949e;--text3:#6e7681;
   --green:#3fb950;--blue:#58a6ff;--orange:#f0883e;--red:#f85149;
   --bus1:#58a6ff;--bus2:#3fb950;--bus3:#f0883e;
-  --radius:10px;--font:'Inter',sans-serif;--mono:'JetBrains Mono',monospace;
+  --font:'Inter',sans-serif;--mono:'JetBrains Mono',monospace;
 }
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px}
 
-/* ── TOPBAR ── */
-.topbar{
-  position:sticky;top:0;z-index:1000;
+/* RESET CRÍTICO: todo el viewport ocupado */
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px}
+
+/* TOPBAR fija */
+#topbar{
+  position:fixed;top:0;left:0;right:0;height:48px;z-index:1000;
   background:var(--bg2);border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:10px;padding:0 14px;height:50px;
+  display:flex;align-items:center;gap:10px;padding:0 14px;
 }
-.logo{font-size:15px;font-weight:700;letter-spacing:-0.02em;white-space:nowrap}
+.logo{font-size:14px;font-weight:700;letter-spacing:-0.02em;white-space:nowrap}
 .logo span{color:var(--green)}
 .badge{display:inline-flex;align-items:center;gap:5px;background:var(--bg3);
   border:1px solid var(--border2);border-radius:20px;padding:3px 9px;font-size:10px;color:var(--text2)}
 .dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s ease infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.topbar-menu{margin-left:auto}
-.menu-btn{background:var(--bg3);border:1px solid var(--border2);color:var(--text);
-  border-radius:6px;padding:6px 10px;font-size:18px;cursor:pointer;line-height:1;display:none}
-
-/* ── FILTROS BAR ── */
-.filtros-bar{
-  background:var(--bg2);border-bottom:1px solid var(--border);
-  padding:8px 14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;
-}
-.fg{display:flex;align-items:center;gap:5px}
+.ml{margin-left:auto;display:flex;gap:6px;align-items:center}
+.fg{display:flex;align-items:center;gap:5px;background:var(--bg3);
+  border:1px solid var(--border2);border-radius:6px;padding:3px 8px}
 .fg-label{font-size:9px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.07em}
-select{padding:5px 7px;background:var(--bg3);border:1px solid var(--border2);
-  color:var(--text);border-radius:6px;font-size:12px;font-family:var(--font);cursor:pointer;outline:none}
+select{padding:3px 5px;background:transparent;border:none;color:var(--text);
+  font-size:11px;font-family:var(--font);cursor:pointer;outline:none}
 select option{background:var(--bg3)}
 
-/* ── BUS PILLS ── */
-.bus-pills{padding:10px 14px;background:var(--bg2);border-bottom:1px solid var(--border);
-  display:flex;gap:6px;flex-wrap:wrap}
-.fb{font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;
+/* BUS PILLS fija debajo del topbar */
+#pills{
+  position:fixed;top:48px;left:0;right:0;height:38px;z-index:999;
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:6px;padding:0 14px;overflow-x:auto;
+}
+#pills::-webkit-scrollbar{height:0}
+.fb{font-size:11px;font-weight:500;padding:4px 11px;border-radius:20px;
   border:1px solid var(--border2);background:transparent;color:var(--text2);
-  cursor:pointer;font-family:var(--font);transition:all .15s;white-space:nowrap}
+  cursor:pointer;font-family:var(--font);transition:all .15s;white-space:nowrap;flex-shrink:0}
 .fb.a0{background:var(--bg3);color:var(--text)}
 .fb.a1{background:rgba(88,166,255,.15);color:var(--bus1);border-color:var(--bus1)}
 .fb.a2{background:rgba(63,185,80,.15);color:var(--bus2);border-color:var(--bus2)}
 .fb.a3{background:rgba(240,136,62,.15);color:var(--bus3);border-color:var(--bus3)}
 
-/* ── LAYOUT PRINCIPAL ── */
-.main{display:flex;height:calc(100vh - 50px);overflow:hidden}
+/* CONTENEDOR PRINCIPAL — debajo de topbar+pills */
+#wrapper{
+  position:fixed;
+  top:86px; /* 48+38 */
+  left:0;right:0;bottom:0;
+  display:flex;
+}
 
 /* SIDEBAR desktop */
-.sidebar{
-  width:280px;flex-shrink:0;
+#sidebar{
+  width:275px;flex-shrink:0;
   background:var(--bg2);border-right:1px solid var(--border);
   display:flex;flex-direction:column;overflow-y:auto;
+  height:100%;
 }
-.maparea{flex:1;position:relative;min-height:0}
 
-/* ── KPI GRID ── */
-.ss{padding:10px 12px;border-bottom:1px solid var(--border)}
+/* MAPA — ocupa el resto */
+#mapwrap{
+  flex:1;
+  position:relative;
+  height:100%;
+}
+#map{
+  position:absolute;
+  inset:0;
+}
+
+/* SIDEBAR contenido */
+.ss{padding:10px 12px;border-bottom:1px solid var(--border);flex-shrink:0}
 .st{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:7px}
 .kg{display:grid;grid-template-columns:1fr 1fr;gap:5px}
-.kc{background:var(--bg3);border-radius:7px;padding:9px 10px;border:1px solid var(--border)}
+.kc{background:var(--bg3);border-radius:7px;padding:8px 10px;border:1px solid var(--border)}
 .kl{font-size:9px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
-.kv{font-size:17px;font-weight:600;font-family:var(--mono)}
+.kv{font-size:16px;font-weight:600;font-family:var(--mono)}
 .g{color:var(--green)}.b{color:var(--blue)}.o{color:var(--orange)}.r{color:var(--red)}.w{color:var(--text)}
 .ks{font-size:9px;color:var(--text3);margin-top:1px}
-
-/* ── BUS CARDS ── */
 .bc{background:var(--bg3);border-radius:7px;padding:8px 10px;border-left:3px solid var(--border2);
   margin-bottom:4px;cursor:pointer;transition:background .12s}
-.bc:hover,.bc:active{background:var(--bg4)}
+.bc:hover{background:var(--bg4)}
 .bc.b0{border-left-color:var(--bus1)}.bc.b1{border-left-color:var(--bus2)}.bc.b2{border-left-color:var(--bus3)}
 .bn{font-size:12px;font-weight:600;margin-bottom:2px}
 .bs{display:flex;gap:7px;font-size:10px;color:var(--text2);font-family:var(--mono);flex-wrap:wrap}
-
-/* ── CHARTS ── */
-.charts-wrap{padding:10px 12px;display:flex;flex-direction:column;gap:7px}
-.cc{background:var(--bg3);border-radius:7px;padding:9px;border:1px solid var(--border)}
+.charts-inner{padding:10px 12px;display:flex;flex-direction:column;gap:7px}
+.cc{background:var(--bg3);border-radius:7px;padding:8px;border:1px solid var(--border)}
 .ct{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;
-  color:var(--text3);margin-bottom:5px;display:flex;justify-content:space-between;align-items:center}
+  color:var(--text3);margin-bottom:4px;display:flex;justify-content:space-between}
 .ct-sub{font-family:var(--mono);font-size:9px;color:var(--blue);font-weight:400;text-transform:none;letter-spacing:0}
-.cw{position:relative;height:90px}
+.cw{position:relative;height:88px}
 
-/* ── MAPA ── */
-#map{height:100%;width:100%}
+/* OVERLAYS del mapa */
 .mi{position:absolute;top:10px;right:10px;z-index:400;
   background:rgba(13,17,23,.92);backdrop-filter:blur(8px);
-  border:1px solid var(--border2);border-radius:8px;padding:9px 11px;font-size:11px}
+  border:1px solid var(--border2);border-radius:8px;padding:9px 11px}
 .mt{font-size:9px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
-.li{display:flex;align-items:center;gap:6px;color:var(--text2);margin-bottom:3px}
+.li{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--text2);margin-bottom:3px}
 .lc{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.map-badge{position:absolute;bottom:10px;left:10px;z-index:400;
+.map-badge{position:absolute;bottom:20px;left:10px;z-index:400;
   background:rgba(13,17,23,.88);backdrop-filter:blur(8px);
   border:1px solid var(--border2);border-radius:6px;
   padding:5px 10px;font-size:11px;color:var(--text);font-family:var(--mono);display:none}
-.map-badge span{color:var(--green);font-weight:600}
+.map-badge b{color:var(--green)}
 
-/* ── PANEL MÓVIL ── */
+/* PANEL MÓVIL */
 .mobile-panel{
-  display:none;
-  position:fixed;bottom:0;left:0;right:0;z-index:900;
-  background:var(--bg2);border-top:1px solid var(--border2);
-  border-radius:16px 16px 0 0;
-  max-height:75vh;overflow-y:auto;
+  position:fixed;bottom:0;left:0;right:0;z-index:1100;
+  background:var(--bg2);border-top:2px solid var(--border2);
+  border-radius:14px 14px 0 0;
+  max-height:72vh;overflow-y:auto;
   transform:translateY(100%);
-  transition:transform .3s cubic-bezier(.4,0,.2,1);
+  transition:transform .28s cubic-bezier(.4,0,.2,1);
+  display:none;
 }
 .mobile-panel.open{transform:translateY(0)}
-.panel-handle{width:36px;height:4px;background:var(--bg4);border-radius:2px;
-  margin:10px auto 6px;cursor:pointer}
-.panel-tabs{display:flex;border-bottom:1px solid var(--border);padding:0 14px}
-.ptab{flex:1;padding:10px 4px;font-size:11px;font-weight:600;color:var(--text3);
+.ph{width:32px;height:4px;background:var(--bg4);border-radius:2px;margin:9px auto 5px;cursor:pointer}
+.ptabs{display:flex;border-bottom:1px solid var(--border);padding:0 14px}
+.ptab{flex:1;padding:9px 4px;font-size:11px;font-weight:600;color:var(--text3);
   text-align:center;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s}
 .ptab.active{color:var(--text);border-bottom-color:var(--green)}
-.panel-content{padding:12px 14px}
-
-/* ── FAB (botón flotante móvil) ── */
-.fab{
-  display:none;position:fixed;bottom:20px;right:16px;z-index:800;
-  width:50px;height:50px;border-radius:25px;
-  background:var(--green);color:#000;font-size:22px;
+.pcontent{padding:12px 14px 20px}
+.fab{position:fixed;bottom:18px;right:16px;z-index:1050;
+  width:48px;height:48px;border-radius:24px;
+  background:var(--green);color:#000;font-size:20px;font-weight:700;
   border:none;cursor:pointer;box-shadow:0 4px 16px rgba(63,185,80,.4);
-  align-items:center;justify-content:center;font-weight:700;
-  transition:transform .15s;
-}
-.fab:active{transform:scale(.93)}
+  display:none;align-items:center;justify-content:center;transition:transform .15s}
+.fab:active{transform:scale(.92)}
 
-/* ── RESPONSIVE ── */
+/* RESPONSIVE */
 @media(max-width:768px){
-  .main{height:auto;flex-direction:column;overflow:visible}
-  .sidebar{display:none} /* ocultamos sidebar desktop */
-  .maparea{height:55vh;min-height:300px}
+  #sidebar{display:none}
+  #wrapper{top:86px;flex-direction:column}
+  #mapwrap{height:52vh;flex:none}
   .mobile-panel{display:block}
   .fab{display:flex}
-  .menu-btn{display:block}
-  .filtros-bar{overflow-x:auto;flex-wrap:nowrap;padding:7px 12px;gap:6px}
-  .filtros-bar::-webkit-scrollbar{height:0}
-  .bus-pills{padding:8px 12px;gap:5px}
-  .fb{font-size:10px;padding:4px 10px}
-  .mi{top:8px;right:8px;padding:7px 9px;font-size:10px}
-  select{font-size:11px;padding:4px 5px}
-  body{overflow-y:auto;height:auto}
+  .ml .fg:nth-child(3){display:none} /* ocultar "Ver" en móvil, va en pills */
 }
 @media(min-width:769px){
   .mobile-panel,.fab{display:none!important}
-  .main{height:calc(100vh - 50px)}
-  .sidebar{display:flex}
 }
 
 ::-webkit-scrollbar{width:4px;height:4px}
@@ -168,71 +163,66 @@ select option{background:var(--bg3)}
 <body>
 
 <!-- TOPBAR -->
-<div class="topbar">
+<div id="topbar">
   <div class="logo">SIG <span>Flixbus</span></div>
   <div class="badge"><span class="dot"></span>Dashboard</div>
-  <div class="topbar-menu">
-    <button class="menu-btn" onclick="togglePanel()">☰</button>
-  </div>
-</div>
-
-<!-- FILTROS -->
-<div class="filtros-bar">
-  <div class="fg">
-    <span class="fg-label">Mes</span>
-    <select id="sel-mes">
-      <option value="todos">Todos</option>
-      <option value="2024-08">Agosto</option>
-      <option value="2024-09">Septiembre</option>
-      <option value="2024-10">Octubre</option>
-    </select>
-  </div>
-  <div class="fg">
-    <span class="fg-label">Día</span>
-    <select id="sel-dia"><option value="todos">Todos</option></select>
-  </div>
-  <div class="fg">
-    <span class="fg-label">Ver</span>
-    <select id="sel-capa">
-      <option value="in_p">Subidas</option>
-      <option value="out_p">Bajadas</option>
-      <option value="ocup">Ocupación</option>
-    </select>
+  <div class="ml">
+    <div class="fg">
+      <span class="fg-label">Mes</span>
+      <select id="sel-mes">
+        <option value="todos">Todos</option>
+        <option value="2024-08">Agosto</option>
+        <option value="2024-09">Septiembre</option>
+        <option value="2024-10">Octubre</option>
+      </select>
+    </div>
+    <div class="fg">
+      <span class="fg-label">Día</span>
+      <select id="sel-dia"><option value="todos">Todos</option></select>
+    </div>
+    <div class="fg">
+      <span class="fg-label">Ver</span>
+      <select id="sel-capa">
+        <option value="in_p">Subidas</option>
+        <option value="out_p">Bajadas</option>
+        <option value="ocup">Ocupación</option>
+      </select>
+    </div>
   </div>
 </div>
 
 <!-- BUS PILLS -->
-<div class="bus-pills" id="bus-filters">
+<div id="pills" id="bus-filters">
   <button class="fb a0" data-bus="todos" onclick="filterBus('todos')">Todos</button>
   <button class="fb" data-bus="BUS-GKZB98" onclick="filterBus('BUS-GKZB98')">GKZB98</button>
   <button class="fb" data-bus="BUS-KDVX34" onclick="filterBus('BUS-KDVX34')">KDVX34</button>
   <button class="fb" data-bus="BUS-KGBT83" onclick="filterBus('BUS-KGBT83')">KGBT83</button>
 </div>
 
-<!-- MAIN -->
-<div class="main">
+<!-- WRAPPER PRINCIPAL -->
+<div id="wrapper">
 
-  <!-- SIDEBAR (solo desktop) -->
-  <div class="sidebar">
+  <!-- SIDEBAR desktop -->
+  <div id="sidebar">
     <div class="ss">
-      <div class="st">Indicadores globales</div>
-      <div class="kg" id="kpi-global-desk"></div>
+      <div class="st">Indicadores</div>
+      <div class="kg" id="kpi-d"></div>
     </div>
     <div class="ss">
       <div class="st">Por bus</div>
-      <div id="bus-cards-desk"></div>
+      <div id="cards-d"></div>
     </div>
-    <div class="ss" style="flex:1;border-bottom:none;overflow-y:auto">
-      <div class="charts-wrap" style="padding:0">
-        <div class="cc"><div class="ct">Pasajeros diarios <span class="ct-sub" id="ct-dem-sub-d"></span></div><div class="cw"><canvas id="c-dem-d"></canvas></div></div>
+    <div style="overflow-y:auto;flex:1">
+      <div class="charts-inner">
+        <div class="cc"><div class="ct">Pasajeros diarios <span class="ct-sub" id="csub-dem-d"></span></div><div class="cw"><canvas id="c-dem-d"></canvas></div></div>
         <div class="cc"><div class="ct">Vueltas por día</div><div class="cw"><canvas id="c-vuel-d"></canvas></div></div>
-        <div class="cc"><div class="ct">Subidas por hora <span class="ct-sub" id="ct-hora-sub-d"></span></div><div class="cw"><canvas id="c-hora-d"></canvas></div></div>
+        <div class="cc"><div class="ct">Subidas por hora <span class="ct-sub" id="csub-hora-d"></span></div><div class="cw"><canvas id="c-hora-d"></canvas></div></div>
       </div>
     </div>
   </div>
 
   <!-- MAPA -->
-  <div class="maparea">
+  <div id="mapwrap">
     <div id="map"></div>
     <div class="mi">
       <div class="mt">Leyenda</div>
@@ -241,38 +231,31 @@ select option{background:var(--bg3)}
       <div class="li"><span class="lc" style="background:var(--bus3)"></span>KGBT83</div>
       <div style="border-top:1px solid #30363d;margin:5px 0"></div>
       <div class="li"><span class="lc" style="background:rgba(255,255,255,.2)"></span>Sin mov.</div>
-      <div style="font-size:9px;color:var(--text3);margin-top:3px">Radio = valor</div>
+      <div style="font-size:9px;color:var(--text3);margin-top:2px">Radio = valor</div>
     </div>
-    <div class="map-badge" id="map-badge"><span id="map-badge-txt"></span></div>
+    <div class="map-badge" id="mbadge"><b id="mbadge-txt"></b></div>
   </div>
 </div>
 
 <!-- FAB móvil -->
-<button class="fab" onclick="togglePanel()">↑</button>
+<button class="fab" id="fab" onclick="togglePanel()">☰</button>
 
 <!-- PANEL MÓVIL -->
-<div class="mobile-panel" id="mobile-panel">
-  <div class="panel-handle" onclick="closePanel()"></div>
-  <div class="panel-tabs">
+<div class="mobile-panel" id="mpanel">
+  <div class="ph" onclick="closePanel()"></div>
+  <div class="ptabs">
     <div class="ptab active" onclick="switchTab('kpis')">Indicadores</div>
     <div class="ptab" onclick="switchTab('charts')">Gráficos</div>
     <div class="ptab" onclick="switchTab('buses')">Buses</div>
   </div>
-  <div class="panel-content">
-    <!-- KPIs móvil -->
-    <div id="tab-kpis">
-      <div class="kg" id="kpi-global-mob" style="margin-top:4px"></div>
-    </div>
-    <!-- Charts móvil -->
+  <div class="pcontent">
+    <div id="tab-kpis"><div class="kg" id="kpi-m" style="margin-top:4px"></div></div>
     <div id="tab-charts" style="display:none">
-      <div class="cc" style="margin-bottom:8px"><div class="ct">Pasajeros diarios <span class="ct-sub" id="ct-dem-sub-m"></span></div><div class="cw"><canvas id="c-dem-m"></canvas></div></div>
+      <div class="cc" style="margin-bottom:8px"><div class="ct">Pasajeros diarios <span class="ct-sub" id="csub-dem-m"></span></div><div class="cw"><canvas id="c-dem-m"></canvas></div></div>
       <div class="cc" style="margin-bottom:8px"><div class="ct">Vueltas por día</div><div class="cw"><canvas id="c-vuel-m"></canvas></div></div>
-      <div class="cc" style="margin-bottom:8px"><div class="ct">Subidas por hora <span class="ct-sub" id="ct-hora-sub-m"></span></div><div class="cw"><canvas id="c-hora-m"></canvas></div></div>
+      <div class="cc"><div class="ct">Subidas por hora <span class="ct-sub" id="csub-hora-m"></span></div><div class="cw"><canvas id="c-hora-m"></canvas></div></div>
     </div>
-    <!-- Buses móvil -->
-    <div id="tab-buses" style="display:none">
-      <div id="bus-cards-mob"></div>
-    </div>
+    <div id="tab-buses" style="display:none"><div id="cards-m"></div></div>
   </div>
 </div>
 
@@ -283,66 +266,41 @@ const D={"bus": ["BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GK
 const V={"bus": ["BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-GKZB98", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KDVX34", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83", "BUS-KGBT83"], "fecha": ["2024-08-01", "2024-08-02", "2024-08-05", "2024-08-06", "2024-08-07", "2024-08-08", "2024-08-09", "2024-08-10", "2024-08-11", "2024-08-12", "2024-08-13", "2024-08-14", "2024-08-15", "2024-08-16", "2024-08-17", "2024-08-20", "2024-08-21", "2024-08-22", "2024-08-23", "2024-08-24", "2024-08-25", "2024-08-26", "2024-08-27", "2024-08-28", "2024-08-29", "2024-08-30", "2024-08-31", "2024-09-01", "2024-09-02", "2024-09-04", "2024-09-09", "2024-09-10", "2024-09-11", "2024-09-12", "2024-09-13", "2024-09-14", "2024-09-15", "2024-09-16", "2024-09-17", "2024-09-18", "2024-09-19", "2024-09-20", "2024-09-21", "2024-09-22", "2024-09-23", "2024-09-24", "2024-09-25", "2024-09-26", "2024-09-27", "2024-09-28", "2024-09-29", "2024-09-30", "2024-10-01", "2024-10-02", "2024-10-03", "2024-10-04", "2024-10-05", "2024-10-06", "2024-10-07", "2024-10-08", "2024-10-09", "2024-10-11", "2024-10-12", "2024-10-13", "2024-10-14", "2024-10-15", "2024-10-16", "2024-10-17", "2024-10-18", "2024-10-19", "2024-10-20", "2024-10-21", "2024-10-22", "2024-10-23", "2024-10-24", "2024-10-25", "2024-10-26", "2024-10-27", "2024-10-28", "2024-10-30", "2024-10-31", "2024-08-01", "2024-08-02", "2024-08-03", "2024-08-04", "2024-08-05", "2024-08-06", "2024-08-07", "2024-08-08", "2024-08-09", "2024-08-10", "2024-08-11", "2024-08-12", "2024-08-13", "2024-08-14", "2024-08-15", "2024-08-16", "2024-08-17", "2024-08-18", "2024-08-19", "2024-08-20", "2024-08-21", "2024-08-22", "2024-08-23", "2024-08-24", "2024-08-25", "2024-08-26", "2024-08-27", "2024-08-28", "2024-08-29", "2024-08-30", "2024-08-31", "2024-09-02", "2024-09-03", "2024-09-04", "2024-09-05", "2024-09-06", "2024-09-08", "2024-09-09", "2024-09-10", "2024-09-11", "2024-09-12", "2024-09-13", "2024-09-14", "2024-09-15", "2024-09-16", "2024-09-17", "2024-09-18", "2024-09-19", "2024-09-21", "2024-09-22", "2024-09-23", "2024-09-24", "2024-09-25", "2024-09-26", "2024-09-27", "2024-09-28", "2024-09-29", "2024-09-30", "2024-10-01", "2024-10-02", "2024-10-03", "2024-10-04", "2024-10-05", "2024-10-06", "2024-10-07", "2024-10-08", "2024-10-10", "2024-10-11", "2024-10-12", "2024-10-13", "2024-10-14", "2024-10-15", "2024-10-16", "2024-10-17", "2024-10-18", "2024-10-19", "2024-10-20", "2024-10-21", "2024-10-22", "2024-10-23", "2024-10-24", "2024-10-25", "2024-10-26", "2024-10-27", "2024-10-28", "2024-10-29", "2024-10-30", "2024-10-31", "2024-08-09", "2024-08-10", "2024-08-11", "2024-08-12", "2024-08-13", "2024-08-14", "2024-08-15", "2024-08-16", "2024-08-17", "2024-08-19", "2024-08-20", "2024-08-21", "2024-08-22", "2024-08-23", "2024-08-24", "2024-08-25", "2024-08-26", "2024-08-27", "2024-08-28", "2024-08-29", "2024-08-30", "2024-08-31", "2024-09-01", "2024-09-02", "2024-09-03", "2024-09-04", "2024-09-06", "2024-09-07", "2024-09-08", "2024-09-09", "2024-09-11", "2024-09-12", "2024-09-13", "2024-09-14", "2024-09-15", "2024-09-16", "2024-09-17", "2024-09-18", "2024-09-19", "2024-09-20", "2024-09-21", "2024-09-22", "2024-09-23", "2024-09-24", "2024-09-25", "2024-09-26", "2024-09-27", "2024-09-28", "2024-09-29", "2024-09-30", "2024-10-01", "2024-10-02", "2024-10-03", "2024-10-04", "2024-10-05", "2024-10-06", "2024-10-07", "2024-10-08", "2024-10-09", "2024-10-10", "2024-10-11", "2024-10-12", "2024-10-13", "2024-10-14", "2024-10-15", "2024-10-16", "2024-10-17", "2024-10-18", "2024-10-19", "2024-10-20", "2024-10-21", "2024-10-22", "2024-10-23", "2024-10-24", "2024-10-25", "2024-10-26", "2024-10-27", "2024-10-28", "2024-10-29", "2024-10-30", "2024-10-31"], "nvuel": [8, 10, 9, 14, 11, 7, 9, 11, 6, 7, 4, 4, 4, 4, 3, 11, 9, 8, 8, 11, 9, 12, 6, 11, 5, 11, 5, 8, 1, 1, 5, 11, 9, 7, 10, 10, 9, 2, 6, 5, 13, 10, 11, 11, 2, 1, 6, 4, 8, 11, 11, 9, 3, 2, 7, 10, 9, 9, 7, 9, 9, 11, 12, 8, 11, 10, 1, 4, 4, 7, 7, 12, 7, 8, 8, 6, 7, 11, 6, 1, 10, 1, 3, 3, 4, 2, 2, 3, 5, 2, 5, 5, 2, 5, 5, 6, 13, 9, 12, 12, 11, 9, 12, 7, 6, 10, 9, 9, 10, 11, 10, 7, 2, 1, 9, 10, 7, 12, 11, 9, 12, 10, 14, 11, 11, 14, 9, 9, 11, 2, 10, 4, 10, 10, 11, 7, 11, 11, 11, 10, 12, 10, 10, 11, 9, 8, 2, 8, 11, 10, 10, 11, 7, 8, 7, 8, 7, 10, 9, 7, 10, 9, 9, 1, 8, 11, 9, 8, 12, 3, 7, 8, 6, 3, 9, 7, 1, 4, 4, 9, 7, 5, 10, 12, 10, 10, 10, 7, 11, 8, 12, 11, 8, 3, 3, 6, 14, 13, 1, 5, 13, 15, 14, 13, 11, 10, 6, 12, 12, 9, 11, 10, 14, 11, 11, 12, 9, 12, 10, 12, 16, 8, 13, 13, 13, 12, 10, 12, 12, 11, 12, 11, 11, 12, 12, 9, 13, 12, 10, 9, 7, 9, 6, 8, 11, 8, 11, 2, 6, 13], "pax": [171, 184, 159, 267, 260, 237, 342, 371, 262, 167, 97, 202, 118, 121, 152, 222, 175, 254, 317, 383, 221, 276, 154, 270, 155, 282, 161, 220, 5, 2, 99, 271, 167, 227, 290, 310, 304, 35, 212, 132, 332, 354, 361, 316, 5, 30, 58, 120, 285, 301, 328, 281, 66, 51, 102, 314, 368, 283, 218, 239, 217, 357, 344, 327, 275, 256, 4, 147, 145, 226, 245, 318, 172, 179, 260, 215, 202, 315, 308, 10, 303, 295, 211, 272, 380, 224, 174, 202, 269, 469, 387, 432, 145, 99, 413, 296, 472, 312, 459, 240, 179, 86, 98, 350, 275, 385, 369, 182, 328, 321, 391, 222, 0, 2, 282, 413, 113, 314, 410, 271, 284, 365, 487, 410, 496, 552, 298, 327, 395, 41, 376, 213, 273, 255, 369, 344, 583, 504, 351, 314, 408, 264, 485, 641, 421, 367, 63, 316, 504, 382, 426, 393, 224, 312, 248, 317, 423, 339, 339, 362, 477, 376, 319, 72, 427, 466, 377, 366, 427, 67, 131, 154, 77, 92, 311, 171, 9, 94, 140, 256, 190, 131, 358, 339, 236, 192, 268, 199, 256, 348, 363, 294, 296, 40, 13, 237, 392, 344, 4, 94, 345, 425, 376, 307, 420, 332, 196, 344, 434, 362, 313, 358, 285, 300, 315, 424, 322, 315, 275, 318, 299, 333, 377, 412, 314, 383, 273, 324, 286, 325, 252, 262, 355, 236, 305, 316, 350, 350, 334, 206, 189, 290, 175, 207, 379, 231, 276, 6, 119, 404]};
 const K={"BUS-GKZB98": {"pax_total": 17954, "pax_dia": 214, "vueltas_dia": 7.6, "ocup_max": 88, "ocup_media": 31.8, "vel_media": 13.2}, "BUS-KDVX34": {"pax_total": 28536, "pax_dia": 321, "vueltas_dia": 8.2, "ocup_max": 111, "ocup_media": 33.0, "vel_media": 38.8}, "BUS-KGBT83": {"pax_total": 21900, "pax_dia": 270, "vueltas_dia": 9.5, "ocup_max": 112, "ocup_media": 31.6, "vel_media": 15.7}};
 const H=[{"VehicleID": "BUS-GKZB98", "hora": 1, "IN_global": 1}, {"VehicleID": "BUS-GKZB98", "hora": 2, "IN_global": 30}, {"VehicleID": "BUS-GKZB98", "hora": 3, "IN_global": 0}, {"VehicleID": "BUS-GKZB98", "hora": 6, "IN_global": 23}, {"VehicleID": "BUS-GKZB98", "hora": 7, "IN_global": 49}, {"VehicleID": "BUS-GKZB98", "hora": 8, "IN_global": 633}, {"VehicleID": "BUS-GKZB98", "hora": 9, "IN_global": 911}, {"VehicleID": "BUS-GKZB98", "hora": 10, "IN_global": 914}, {"VehicleID": "BUS-GKZB98", "hora": 11, "IN_global": 684}, {"VehicleID": "BUS-GKZB98", "hora": 12, "IN_global": 227}, {"VehicleID": "BUS-GKZB98", "hora": 13, "IN_global": 226}, {"VehicleID": "BUS-GKZB98", "hora": 14, "IN_global": 887}, {"VehicleID": "BUS-GKZB98", "hora": 15, "IN_global": 1056}, {"VehicleID": "BUS-GKZB98", "hora": 16, "IN_global": 770}, {"VehicleID": "BUS-GKZB98", "hora": 17, "IN_global": 358}, {"VehicleID": "BUS-GKZB98", "hora": 18, "IN_global": 133}, {"VehicleID": "BUS-GKZB98", "hora": 19, "IN_global": 573}, {"VehicleID": "BUS-GKZB98", "hora": 20, "IN_global": 1027}, {"VehicleID": "BUS-GKZB98", "hora": 21, "IN_global": 618}, {"VehicleID": "BUS-GKZB98", "hora": 22, "IN_global": 214}, {"VehicleID": "BUS-KDVX34", "hora": 0, "IN_global": 71}, {"VehicleID": "BUS-KDVX34", "hora": 1, "IN_global": 0}, {"VehicleID": "BUS-KDVX34", "hora": 2, "IN_global": 0}, {"VehicleID": "BUS-KDVX34", "hora": 3, "IN_global": 0}, {"VehicleID": "BUS-KDVX34", "hora": 4, "IN_global": 2}, {"VehicleID": "BUS-KDVX34", "hora": 5, "IN_global": 61}, {"VehicleID": "BUS-KDVX34", "hora": 6, "IN_global": 40}, {"VehicleID": "BUS-KDVX34", "hora": 7, "IN_global": 308}, {"VehicleID": "BUS-KDVX34", "hora": 8, "IN_global": 952}, {"VehicleID": "BUS-KDVX34", "hora": 9, "IN_global": 1692}, {"VehicleID": "BUS-KDVX34", "hora": 10, "IN_global": 1677}, {"VehicleID": "BUS-KDVX34", "hora": 11, "IN_global": 503}, {"VehicleID": "BUS-KDVX34", "hora": 12, "IN_global": 310}, {"VehicleID": "BUS-KDVX34", "hora": 13, "IN_global": 542}, {"VehicleID": "BUS-KDVX34", "hora": 14, "IN_global": 1505}, {"VehicleID": "BUS-KDVX34", "hora": 15, "IN_global": 1638}, {"VehicleID": "BUS-KDVX34", "hora": 16, "IN_global": 1507}, {"VehicleID": "BUS-KDVX34", "hora": 17, "IN_global": 424}, {"VehicleID": "BUS-KDVX34", "hora": 18, "IN_global": 654}, {"VehicleID": "BUS-KDVX34", "hora": 19, "IN_global": 1007}, {"VehicleID": "BUS-KDVX34", "hora": 20, "IN_global": 944}, {"VehicleID": "BUS-KDVX34", "hora": 21, "IN_global": 1459}, {"VehicleID": "BUS-KDVX34", "hora": 22, "IN_global": 108}, {"VehicleID": "BUS-KGBT83", "hora": 0, "IN_global": 4}, {"VehicleID": "BUS-KGBT83", "hora": 3, "IN_global": 3}, {"VehicleID": "BUS-KGBT83", "hora": 5, "IN_global": 18}, {"VehicleID": "BUS-KGBT83", "hora": 6, "IN_global": 42}, {"VehicleID": "BUS-KGBT83", "hora": 7, "IN_global": 223}, {"VehicleID": "BUS-KGBT83", "hora": 8, "IN_global": 1865}, {"VehicleID": "BUS-KGBT83", "hora": 9, "IN_global": 692}, {"VehicleID": "BUS-KGBT83", "hora": 10, "IN_global": 709}, {"VehicleID": "BUS-KGBT83", "hora": 11, "IN_global": 468}, {"VehicleID": "BUS-KGBT83", "hora": 12, "IN_global": 327}, {"VehicleID": "BUS-KGBT83", "hora": 13, "IN_global": 632}, {"VehicleID": "BUS-KGBT83", "hora": 14, "IN_global": 1688}, {"VehicleID": "BUS-KGBT83", "hora": 15, "IN_global": 616}, {"VehicleID": "BUS-KGBT83", "hora": 16, "IN_global": 668}, {"VehicleID": "BUS-KGBT83", "hora": 17, "IN_global": 401}, {"VehicleID": "BUS-KGBT83", "hora": 18, "IN_global": 305}, {"VehicleID": "BUS-KGBT83", "hora": 19, "IN_global": 1595}, {"VehicleID": "BUS-KGBT83", "hora": 20, "IN_global": 995}, {"VehicleID": "BUS-KGBT83", "hora": 21, "IN_global": 478}, {"VehicleID": "BUS-KGBT83", "hora": 22, "IN_global": 186}];
-const FECHAS_TODAS=["2024-08-01", "2024-08-02", "2024-08-03", "2024-08-04", "2024-08-05", "2024-08-06", "2024-08-07", "2024-08-08", "2024-08-09", "2024-08-10", "2024-08-11", "2024-08-12", "2024-08-13", "2024-08-14", "2024-08-15", "2024-08-16", "2024-08-17", "2024-08-18", "2024-08-19", "2024-08-20", "2024-08-21", "2024-08-22", "2024-08-23", "2024-08-24", "2024-08-25", "2024-08-26", "2024-08-27", "2024-08-28", "2024-08-29", "2024-08-30", "2024-08-31", "2024-09-01", "2024-09-02", "2024-09-03", "2024-09-04", "2024-09-05", "2024-09-06", "2024-09-07", "2024-09-08", "2024-09-09", "2024-09-10", "2024-09-11", "2024-09-12", "2024-09-13", "2024-09-14", "2024-09-15", "2024-09-16", "2024-09-17", "2024-09-18", "2024-09-19", "2024-09-20", "2024-09-21", "2024-09-22", "2024-09-23", "2024-09-24", "2024-09-25", "2024-09-26", "2024-09-27", "2024-09-28", "2024-09-29", "2024-09-30", "2024-10-01", "2024-10-02", "2024-10-03", "2024-10-04", "2024-10-05", "2024-10-06", "2024-10-07", "2024-10-08", "2024-10-09", "2024-10-10", "2024-10-11", "2024-10-12", "2024-10-13", "2024-10-14", "2024-10-15", "2024-10-16", "2024-10-17", "2024-10-18", "2024-10-19", "2024-10-20", "2024-10-21", "2024-10-22", "2024-10-23", "2024-10-24", "2024-10-25", "2024-10-26", "2024-10-27", "2024-10-28", "2024-10-29", "2024-10-30", "2024-10-31"];
-
+const FECHAS=["2024-08-01", "2024-08-02", "2024-08-03", "2024-08-04", "2024-08-05", "2024-08-06", "2024-08-07", "2024-08-08", "2024-08-09", "2024-08-10", "2024-08-11", "2024-08-12", "2024-08-13", "2024-08-14", "2024-08-15", "2024-08-16", "2024-08-17", "2024-08-18", "2024-08-19", "2024-08-20", "2024-08-21", "2024-08-22", "2024-08-23", "2024-08-24", "2024-08-25", "2024-08-26", "2024-08-27", "2024-08-28", "2024-08-29", "2024-08-30", "2024-08-31", "2024-09-01", "2024-09-02", "2024-09-03", "2024-09-04", "2024-09-05", "2024-09-06", "2024-09-07", "2024-09-08", "2024-09-09", "2024-09-10", "2024-09-11", "2024-09-12", "2024-09-13", "2024-09-14", "2024-09-15", "2024-09-16", "2024-09-17", "2024-09-18", "2024-09-19", "2024-09-20", "2024-09-21", "2024-09-22", "2024-09-23", "2024-09-24", "2024-09-25", "2024-09-26", "2024-09-27", "2024-09-28", "2024-09-29", "2024-09-30", "2024-10-01", "2024-10-02", "2024-10-03", "2024-10-04", "2024-10-05", "2024-10-06", "2024-10-07", "2024-10-08", "2024-10-09", "2024-10-10", "2024-10-11", "2024-10-12", "2024-10-13", "2024-10-14", "2024-10-15", "2024-10-16", "2024-10-17", "2024-10-18", "2024-10-19", "2024-10-20", "2024-10-21", "2024-10-22", "2024-10-23", "2024-10-24", "2024-10-25", "2024-10-26", "2024-10-27", "2024-10-28", "2024-10-29", "2024-10-30", "2024-10-31"];
 const BC={'BUS-GKZB98':'#58a6ff','BUS-KDVX34':'#3fb950','BUS-KGBT83':'#f0883e'};
 const BUSES=['BUS-GKZB98','BUS-KDVX34','BUS-KGBT83'];
-let activeBus='todos',activeMes='todos',activeDia='todos',activeCapa='in_p';
-let mapLayer=null;
-let charts={};
-let activeTab='kpis';
 
-// MAPA
-const map=L.map('map',{center:[-33.45,-70.75],zoom:10,preferCanvas:true});
+let activeBus='todos',activeMes='todos',activeDia='todos',activeCapa='in_p';
+let mapLayer=null, charts={};
+
+// ── MAPA — init con tamaño explícito ─────────────────────
+const map = L.map('map',{center:[-33.45,-70.75],zoom:10,preferCanvas:true,zoomControl:true});
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
   attribution:'© OpenStreetMap © CARTO',subdomains:'abcd',maxZoom:19
 }).addTo(map);
 
-// Popup styles
+// Estilos popup oscuros
 const ps=document.createElement('style');
-ps.textContent='.dp .leaflet-popup-content-wrapper{background:rgba(13,17,23,.97);border:1px solid #30363d;border-radius:8px;color:#e6edf3;box-shadow:0 4px 20px rgba(0,0,0,.6)}.dp .leaflet-popup-tip{background:rgba(13,17,23,.97)}.leaflet-popup-content{margin:10px 13px;font-family:Inter,sans-serif;font-size:12px}.pr{display:flex;justify-content:space-between;margin-bottom:3px;color:#8b949e}.pr span:last-child{color:#e6edf3;font-family:JetBrains Mono,monospace}';
+ps.textContent='.dp .leaflet-popup-content-wrapper{background:rgba(13,17,23,.97);border:1px solid #30363d;border-radius:8px;color:#e6edf3;box-shadow:0 4px 20px rgba(0,0,0,.6)}.dp .leaflet-popup-tip{background:rgba(13,17,23,.97)}.leaflet-popup-content{margin:10px 13px;font-size:12px;font-family:Inter,sans-serif}.pr{display:flex;justify-content:space-between;margin-bottom:3px;color:#8b949e}.pr b{color:#e6edf3;font-family:JetBrains Mono,monospace;font-weight:500}';
 document.head.appendChild(ps);
 
-// ── PANEL MÓVIL ──────────────────────────────────────────
-function togglePanel(){
-  const p=document.getElementById('mobile-panel');
-  p.classList.toggle('open');
-  const fab=document.querySelector('.fab');
-  fab.textContent=p.classList.contains('open')?'↓':'↑';
-  if(p.classList.contains('open'))setTimeout(()=>map.invalidateSize(),300);
-}
-function closePanel(){
-  document.getElementById('mobile-panel').classList.remove('open');
-  document.querySelector('.fab').textContent='↑';
-}
-function switchTab(tab){
-  activeTab=tab;
-  ['kpis','charts','buses'].forEach(t=>{
-    document.getElementById('tab-'+t).style.display=t===tab?'block':'none';
-  });
-  document.querySelectorAll('.ptab').forEach((el,i)=>{
-    el.classList.toggle('active',['kpis','charts','buses'][i]===tab);
-  });
-  if(tab==='charts')renderCharts();
-}
+// INVALIDAR tamaño del mapa tras carga completa
+window.addEventListener('load',()=>setTimeout(()=>map.invalidateSize(),100));
+window.addEventListener('resize',()=>setTimeout(()=>map.invalidateSize(),150));
 
-// ── DATOS FILTRADOS ───────────────────────────────────────
-function getBuses(){return activeBus==='todos'?BUSES:[activeBus];}
-function getFechas(){
-  if(activeDia!=='todos')return[activeDia];
-  if(activeMes!=='todos')return FECHAS_TODAS.filter(f=>f.startsWith(activeMes));
-  return FECHAS_TODAS;
-}
+// ── HELPERS ───────────────────────────────────────────────
+const getBuses=()=>activeBus==='todos'?BUSES:[activeBus];
+const getFechas=()=>activeDia!=='todos'?[activeDia]:activeMes!=='todos'?FECHAS.filter(f=>f.startsWith(activeMes)):FECHAS;
 
 // ── DÍAS ─────────────────────────────────────────────────
 function poblarDias(){
   const sel=document.getElementById('sel-dia');
   while(sel.options.length>1)sel.remove(1);
-  const ff=activeMes==='todos'?FECHAS_TODAS:FECHAS_TODAS.filter(f=>f.startsWith(activeMes));
+  const ff=activeMes==='todos'?FECHAS:FECHAS.filter(f=>f.startsWith(activeMes));
+  const dias=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
   ff.forEach(f=>{
     const o=document.createElement('option');o.value=f;
     const dt=new Date(f+'T12:00:00');
-    const dias=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
     o.textContent=dias[dt.getDay()]+' '+f.slice(8);
     sel.appendChild(o);
   });
@@ -357,8 +315,8 @@ function kpiHTML(){
   const di=D.bus.map((_,i)=>i).filter(i=>buses.includes(D.bus[i])&&fechas.includes(D.fecha[i]));
   const paxD=fechas.length>0?(di.reduce((s,i)=>s+D.in_p[i],0)/fechas.length).toFixed(0):0;
   const omx=pi.length>0?Math.max(...pi.map(i=>P.ocup[i])):0;
-  let vel=0,n=0;buses.forEach(b=>{const k=K[b];if(k){vel+=k.vel_media;n++;}});
-  vel=n>0?(vel/n).toFixed(1):0;
+  let vel=0,nv=0;buses.forEach(b=>{const k=K[b];if(k){vel+=k.vel_media;nv++;}});
+  vel=nv>0?(vel/nv).toFixed(1):0;
   const vi=V.bus.map((_,i)=>i).filter(i=>buses.includes(V.bus[i])&&fechas.includes(V.fecha[i]));
   const vuT=vi.reduce((s,i)=>s+V.nvuel[i],0);
   return `
@@ -372,13 +330,10 @@ function kpiHTML(){
 }
 function renderKPIs(){
   const h=kpiHTML();
-  const d=document.getElementById('kpi-global-desk');
-  const m=document.getElementById('kpi-global-mob');
-  if(d)d.innerHTML=h;
-  if(m)m.innerHTML=h;
+  ['kpi-d','kpi-m'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=h;});
 }
 
-// ── BUS CARDS ────────────────────────────────────────────
+// ── BUS CARDS ─────────────────────────────────────────────
 function busCardsHTML(){
   const fechas=getFechas();
   return BUSES.map((b,i)=>{
@@ -393,13 +348,10 @@ function busCardsHTML(){
 }
 function renderBusCards(){
   const h=busCardsHTML();
-  const d=document.getElementById('bus-cards-desk');
-  const m=document.getElementById('bus-cards-mob');
-  if(d)d.innerHTML=h;
-  if(m)m.innerHTML=h;
+  ['cards-d','cards-m'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=h;});
 }
 
-// ── MAPA ─────────────────────────────────────────────────
+// ── MAPA ──────────────────────────────────────────────────
 function renderMap(){
   if(mapLayer){map.removeLayer(mapLayer);mapLayer=null;}
   const buses=getBuses(),fechas=getFechas();
@@ -408,7 +360,7 @@ function renderMap(){
     if(!buses.includes(P.bus[i])||!fechas.includes(P.fecha[i]))continue;
     const val=P[activeCapa][i];
     const r=val===0?2.5:Math.min(3+val*0.35,16);
-    const col=val===0?'rgba(255,255,255,0.15)':BC[P.bus[i]];
+    const col=val===0?'rgba(255,255,255,0.12)':BC[P.bus[i]];
     const c=L.circleMarker([P.lat[i],P.lon[i]],{
       radius:r,fillColor:col,fillOpacity:val===0?.2:.72,
       color:val===0?'transparent':col,weight:1,opacity:.85
@@ -416,106 +368,102 @@ function renderMap(){
     c.bindPopup(`<div>
       <b style="color:${BC[P.bus[i]]}">BUS-${P.bus[i].replace('BUS-','')}</b>
       <hr style="border-color:#30363d;margin:5px 0">
-      <div class="pr"><span>Fecha</span><span>${P.fecha[i]}</span></div>
-      <div class="pr"><span>Hora</span><span>${String(P.hora[i]).padStart(2,'0')}:xx</span></div>
-      <div class="pr"><span>Subidas</span><span>${P.in_p[i]}</span></div>
-      <div class="pr"><span>Bajadas</span><span>${P.out_p[i]}</span></div>
-      <div class="pr"><span>Ocupación</span><span>${P.ocup[i]} pax</span></div>
-      <div class="pr"><span>Duración</span><span>${Math.round(P.dur[i]/60)} min</span></div>
+      <div class="pr"><span>Fecha</span><b>${P.fecha[i]}</b></div>
+      <div class="pr"><span>Hora</span><b>${String(P.hora[i]).padStart(2,'0')}:xx</b></div>
+      <div class="pr"><span>Subidas</span><b>${P.in_p[i]}</b></div>
+      <div class="pr"><span>Bajadas</span><b>${P.out_p[i]}</b></div>
+      <div class="pr"><span>Ocupación</span><b>${P.ocup[i]} pax</b></div>
+      <div class="pr"><span>Duración</span><b>${Math.round(P.dur[i]/60)} min</b></div>
     </div>`,{className:'dp'});
     circles.push(c);
   }
   mapLayer=L.layerGroup(circles).addTo(map);
-  // Badge fecha
-  const b=document.getElementById('map-badge');
-  const t=document.getElementById('map-badge-txt');
+  map.invalidateSize();
+
+  // Badge
+  const b=document.getElementById('mbadge');
+  const t=document.getElementById('mbadge-txt');
   if(activeDia!=='todos'){
     const dt=new Date(activeDia+'T12:00:00');
-    const dias=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
-    t.textContent='📅 '+dias[dt.getDay()]+' '+activeDia;b.style.display='block';
+    const dd=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+    t.textContent='📅 '+dd[dt.getDay()]+' '+activeDia;b.style.display='block';
   }else if(activeMes!=='todos'){
     const mn={'2024-08':'Agosto','2024-09':'Septiembre','2024-10':'Octubre'};
     t.textContent='📅 '+mn[activeMes]+' 2024';b.style.display='block';
   }else{b.style.display='none';}
 }
 
-// ── CHARTS ───────────────────────────────────────────────
-const CO={
-  responsive:true,maintainAspectRatio:false,
-  plugins:{legend:{display:false},tooltip:{
-    backgroundColor:'rgba(13,17,23,.95)',borderColor:'#30363d',borderWidth:1,
-    titleColor:'#8b949e',bodyColor:'#e6edf3',
-    titleFont:{size:10},bodyFont:{family:"'JetBrains Mono',monospace",size:11}
-  }},
+// ── CHARTS ────────────────────────────────────────────────
+const CO={responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(13,17,23,.95)',
+    borderColor:'#30363d',borderWidth:1,titleColor:'#8b949e',bodyColor:'#e6edf3',
+    titleFont:{size:10},bodyFont:{family:"'JetBrains Mono',monospace",size:11}}},
   scales:{
     x:{ticks:{color:'#6e7681',font:{size:8},maxTicksLimit:8},grid:{color:'rgba(48,54,61,.4)'},border:{color:'rgba(48,54,61,.4)'}},
     y:{ticks:{color:'#6e7681',font:{size:8}},grid:{color:'rgba(48,54,61,.4)'},border:{color:'rgba(48,54,61,.4)'}}
   }
 };
 
-function makeCharts(suffix){
+function buildCharts(sfx){
   const buses=getBuses(),fechas=getFechas();
-  const isMob=suffix==='m';
+  const horas=Array.from({length:24},(_,i)=>i);
 
-  // Chart dem
-  const cDemEl=document.getElementById('c-dem-'+suffix);
-  const cDemSub=document.getElementById('ct-dem-sub-'+suffix);
+  // Chart 1: Pasajeros por día / por hora si hay día activo
+  const cDemEl=document.getElementById('c-dem-'+sfx);
   if(!cDemEl)return;
-  if(charts['dem-'+suffix])charts['dem-'+suffix].destroy();
-
+  if(charts['d'+sfx])charts['d'+sfx].destroy();
+  const sub1=document.getElementById('csub-dem-'+sfx);
   if(activeDia!=='todos'){
-    if(cDemSub)cDemSub.textContent=activeDia;
-    const horas=Array.from({length:24},(_,i)=>i);
+    if(sub1)sub1.textContent=activeDia;
     const pi=P.lat.map((_,i)=>i).filter(i=>buses.includes(P.bus[i])&&P.fecha[i]===activeDia);
     const inH=horas.map(h=>pi.filter(i=>P.hora[i]===h).reduce((s,i)=>s+P.in_p[i],0));
-    charts['dem-'+suffix]=new Chart(cDemEl,{
-      type:'bar',data:{labels:horas.map(h=>h+'h'),datasets:[{data:inH,
-        backgroundColor:inH.map(v=>v>50?'rgba(63,185,80,.75)':v>20?'rgba(88,166,255,.65)':'rgba(88,166,255,.35)'),borderRadius:2}]},
+    charts['d'+sfx]=new Chart(cDemEl,{type:'bar',
+      data:{labels:horas.map(h=>h+'h'),datasets:[{data:inH,
+        backgroundColor:inH.map(v=>v>50?'rgba(63,185,80,.75)':v>15?'rgba(88,166,255,.65)':'rgba(88,166,255,.35)'),borderRadius:2}]},
       options:{...CO,plugins:{...CO.plugins,tooltip:{...CO.plugins.tooltip,callbacks:{label:c=>' '+c.parsed.y+' sub'}}}}
     });
   }else{
-    if(cDemSub)cDemSub.textContent='';
+    if(sub1)sub1.textContent='';
     const di=D.bus.map((_,i)=>i).filter(i=>buses.includes(D.bus[i])&&fechas.includes(D.fecha[i]));
     const pD=fechas.map(f=>di.filter(i=>D.fecha[i]===f).reduce((s,i)=>s+D.in_p[i],0));
-    charts['dem-'+suffix]=new Chart(cDemEl,{
-      type:'bar',data:{labels:fechas.map(f=>f.slice(5)),datasets:[{data:pD,
-        backgroundColor:'rgba(88,166,255,.55)',borderRadius:2}]},
+    charts['d'+sfx]=new Chart(cDemEl,{type:'bar',
+      data:{labels:fechas.map(f=>f.slice(5)),datasets:[{data:pD,backgroundColor:'rgba(88,166,255,.55)',borderRadius:2}]},
       options:{...CO,plugins:{...CO.plugins,tooltip:{...CO.plugins.tooltip,callbacks:{label:c=>' '+c.parsed.y+' pax'}}}}
     });
   }
 
-  // Chart vueltas
-  const cVuelEl=document.getElementById('c-vuel-'+suffix);
+  // Chart 2: Vueltas
+  const cVuelEl=document.getElementById('c-vuel-'+sfx);
   if(cVuelEl){
-    if(charts['vuel-'+suffix])charts['vuel-'+suffix].destroy();
+    if(charts['v'+sfx])charts['v'+sfx].destroy();
     const vi=V.bus.map((_,i)=>i).filter(i=>buses.includes(V.bus[i])&&fechas.includes(V.fecha[i]));
     const vD=fechas.map(f=>vi.filter(i=>V.fecha[i]===f).reduce((s,i)=>s+V.nvuel[i],0));
-    charts['vuel-'+suffix]=new Chart(cVuelEl,{
-      type:'line',data:{labels:fechas.map(f=>f.slice(5)),datasets:[{data:vD,
-        borderColor:'#3fb950',backgroundColor:'rgba(63,185,80,.08)',pointRadius:1,tension:.4,fill:true}]},
+    charts['v'+sfx]=new Chart(cVuelEl,{type:'line',
+      data:{labels:fechas.map(f=>f.slice(5)),datasets:[{data:vD,borderColor:'#3fb950',
+        backgroundColor:'rgba(63,185,80,.08)',pointRadius:1,tension:.4,fill:true}]},
       options:{...CO,plugins:{...CO.plugins,tooltip:{...CO.plugins.tooltip,callbacks:{label:c=>' '+c.parsed.y+' vueltas'}}}}
     });
   }
 
-  // Chart hora
-  const cHoraEl=document.getElementById('c-hora-'+suffix);
-  const cHoraSub=document.getElementById('ct-hora-sub-'+suffix);
+  // Chart 3: Hora
+  const cHoraEl=document.getElementById('c-hora-'+sfx);
   if(cHoraEl){
-    if(charts['hora-'+suffix])charts['hora-'+suffix].destroy();
-    const horas=Array.from({length:24},(_,i)=>i);
+    if(charts['h'+sfx])charts['h'+sfx].destroy();
+    const sub3=document.getElementById('csub-hora-'+sfx);
     let inH;
     if(activeDia!=='todos'){
-      if(cHoraSub)cHoraSub.textContent=activeDia;
+      if(sub3)sub3.textContent=activeDia;
       const pi=P.lat.map((_,i)=>i).filter(i=>buses.includes(P.bus[i])&&P.fecha[i]===activeDia);
       inH=horas.map(h=>pi.filter(i=>P.hora[i]===h).reduce((s,i)=>s+P.in_p[i],0));
     }else{
-      if(cHoraSub)cHoraSub.textContent='';
+      if(sub3)sub3.textContent='';
       const hf=H.filter(d=>buses.includes(d.VehicleID));
       inH=horas.map(h=>hf.filter(d=>d.hora===h).reduce((s,d)=>s+d.IN_global,0));
     }
-    charts['hora-'+suffix]=new Chart(cHoraEl,{
-      type:'bar',data:{labels:horas.map(h=>h+'h'),datasets:[{data:inH,
-        backgroundColor:inH.map(v=>{const mx=Math.max(...inH,1);return v>mx*.7?'rgba(240,136,62,.8)':v>mx*.3?'rgba(88,166,255,.65)':'rgba(88,166,255,.35)'}),
+    const mx=Math.max(...inH,1);
+    charts['h'+sfx]=new Chart(cHoraEl,{type:'bar',
+      data:{labels:horas.map(h=>h+'h'),datasets:[{data:inH,
+        backgroundColor:inH.map(v=>v>mx*.7?'rgba(240,136,62,.8)':v>mx*.3?'rgba(88,166,255,.65)':'rgba(88,166,255,.35)'),
         borderRadius:2}]},
       options:{...CO,plugins:{...CO.plugins,tooltip:{...CO.plugins.tooltip,callbacks:{label:c=>' '+c.parsed.y}}}}
     });
@@ -523,18 +471,36 @@ function makeCharts(suffix){
 }
 
 function renderCharts(){
-  const isMobile=window.innerWidth<=768;
-  if(isMobile){
-    makeCharts('m');
-  }else{
-    makeCharts('d');
-  }
+  const mob=window.innerWidth<=768;
+  if(mob)buildCharts('m');else buildCharts('d');
 }
 
-// ── CONTROLES ────────────────────────────────────────────
+// ── PANEL MÓVIL ───────────────────────────────────────────
+function togglePanel(){
+  const p=document.getElementById('mpanel');
+  const f=document.getElementById('fab');
+  p.classList.toggle('open');
+  f.textContent=p.classList.contains('open')?'✕':'☰';
+  if(p.classList.contains('open')){setTimeout(()=>map.invalidateSize(),300);renderCharts();}
+}
+function closePanel(){
+  document.getElementById('mpanel').classList.remove('open');
+  document.getElementById('fab').textContent='☰';
+}
+function switchTab(tab){
+  ['kpis','charts','buses'].forEach(t=>{
+    document.getElementById('tab-'+t).style.display=t===tab?'block':'none';
+  });
+  document.querySelectorAll('.ptab').forEach((el,i)=>{
+    el.classList.toggle('active',['kpis','charts','buses'][i]===tab);
+  });
+  if(tab==='charts')setTimeout(renderCharts,50);
+}
+
+// ── CONTROLES ─────────────────────────────────────────────
 function filterBus(bus){
   activeBus=bus;
-  document.querySelectorAll('#bus-filters .fb').forEach(b=>{
+  document.querySelectorAll('#pills .fb').forEach(b=>{
     b.className='fb';
     if(b.dataset.bus===bus){
       if(bus==='todos')b.classList.add('a0');
@@ -550,21 +516,13 @@ document.getElementById('sel-mes').addEventListener('change',e=>{
   poblarDias();document.getElementById('sel-dia').value='todos';update();
 });
 document.getElementById('sel-dia').addEventListener('change',e=>{activeDia=e.target.value;update();});
-document.getElementById('sel-capa').addEventListener('change',e=>{activeCapa=e.target.value;update();});
+document.getElementById('sel-capa').addEventListener('change',e=>{activeCapa=e.target.value;renderMap();});
 
-function update(){
-  renderKPIs();renderBusCards();renderMap();renderCharts();
-}
-
-// Invalidar mapa al rotar/redimensionar
-window.addEventListener('resize',()=>setTimeout(()=>map.invalidateSize(),200));
+function update(){renderKPIs();renderBusCards();renderMap();renderCharts();}
 
 // INIT
 poblarDias();
-renderKPIs();
-renderBusCards();
-renderMap();
-renderCharts();
+update();
 </script>
 </body>
 </html>
