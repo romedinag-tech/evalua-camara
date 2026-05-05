@@ -17,65 +17,117 @@
   --green:#3fb950;--blue:#58a6ff;--orange:#f0883e;--red:#f85149;
   --bus1:#58a6ff;--bus2:#3fb950;--bus3:#f0883e;
   --font:'Inter',sans-serif;--mono:'JetBrains Mono',monospace;
-  --topbar-h:48px;
 }
-html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);
-  font-family:var(--font);font-size:14px}
 
-/* ══ TOPBAR ══════════════════════════════════════════════ */
+/* ══ BASE ═══════════════════════════════════════ */
+html,body{
+  margin:0;padding:0;background:var(--bg);
+  color:var(--text);font-family:var(--font);font-size:14px;
+}
+
+/* ══ TOPBAR ══════════════════════════════════════ */
 #topbar{
-  position:fixed;top:0;left:0;right:0;height:var(--topbar-h);z-index:1000;
+  position:fixed;top:0;left:0;right:0;
+  height:48px;z-index:1000;
   background:var(--bg2);border-bottom:1px solid var(--border);
   display:flex;align-items:center;gap:10px;padding:0 14px;
 }
 .logo{font-size:14px;font-weight:700;letter-spacing:-0.02em;white-space:nowrap}
 .logo span{color:var(--green)}
-.badge{display:inline-flex;align-items:center;gap:5px;background:var(--bg3);
-  border:1px solid var(--border2);border-radius:20px;padding:3px 9px;font-size:10px;color:var(--text2);
-  white-space:nowrap}
+.badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:var(--bg3);border:1px solid var(--border2);
+  border-radius:20px;padding:3px 9px;font-size:10px;color:var(--text2);white-space:nowrap
+}
 .dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s ease infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* ══ BARRA FILTROS — DESKTOP ═════════════════════════════ */
-#filtros-desk{
-  position:fixed;top:var(--topbar-h);left:0;right:0;height:38px;z-index:999;
+/* ══ FILTROS (UNA sola barra, cambia con media query) ════ */
+#filtros{
+  position:fixed;
+  top:48px;left:0;right:0;
+  z-index:999;
   background:var(--bg2);border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:8px;padding:0 14px;
+  display:flex;flex-wrap:wrap;gap:6px;
+  padding:6px 12px;
 }
-.fg{display:flex;align-items:center;gap:5px;background:var(--bg3);
-  border:1px solid var(--border2);border-radius:6px;padding:3px 8px}
-.fg-label{font-size:9px;color:var(--text3);font-weight:600;text-transform:uppercase;
-  letter-spacing:.07em;white-space:nowrap}
-select{padding:3px 4px;background:transparent;border:none;color:var(--text);
-  font-size:11px;font-family:var(--font);cursor:pointer;outline:none;max-width:110px}
-select option{background:var(--bg3)}
+.fg{
+  display:flex;align-items:center;gap:5px;
+  background:var(--bg3);border:1px solid var(--border2);
+  border-radius:7px;padding:6px 10px;
+}
+.fg-label{
+  font-size:10px;color:var(--text3);font-weight:600;
+  text-transform:uppercase;letter-spacing:.07em;white-space:nowrap;flex-shrink:0
+}
+.fg select{
+  background:transparent;border:none;color:var(--text);
+  font-size:12px;font-family:var(--font);cursor:pointer;outline:none;
+  min-width:0;
+}
+.fg select option{background:var(--bg3)}
 
-/* Bus pills */
+/* Desktop: 1 fila, selects con ancho auto */
+@media(min-width:769px){
+  #filtros{flex-wrap:nowrap;padding:5px 12px;height:38px}
+  .fg{padding:3px 8px}
+  .fg select{font-size:11px}
+  #fg-mes{flex:0 0 auto}
+  #fg-dia{flex:0 0 auto}
+  #fg-capa{flex:0 0 auto}
+}
+
+/* Móvil: 2 filas, cada bloque se estira */
+@media(max-width:768px){
+  #filtros{flex-wrap:wrap;padding:6px 12px;gap:6px}
+  .fg{flex:1 1 calc(50% - 3px);min-width:0}
+  .fg select{flex:1;min-width:0;width:100%}
+  #fg-dia{flex:1 1 100%} /* día ocupa toda la fila */
+}
+
+/* ══ PILLS ═══════════════════════════════════════ */
 #pills{
-  position:fixed;top:86px;left:0;right:0;height:38px;z-index:998;
+  position:fixed;left:0;right:0;z-index:998;
   background:var(--bg2);border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:6px;padding:0 14px;overflow-x:auto;
+  display:flex;align-items:center;gap:6px;padding:0 12px;
+  height:40px;overflow-x:auto;
 }
 #pills::-webkit-scrollbar{height:0}
-.fb{font-size:11px;font-weight:500;padding:4px 11px;border-radius:20px;
+/* top dinámico según filtros height */
+@media(min-width:769px){#pills{top:86px}} /* 48+38 */
+@media(max-width:768px){#pills{top:calc(48px + 96px)}} /* 48 + ~2 filas filtros */
+
+.fb{
+  font-size:11px;font-weight:500;padding:4px 12px;border-radius:20px;
   border:1px solid var(--border2);background:transparent;color:var(--text2);
-  cursor:pointer;font-family:var(--font);transition:all .15s;white-space:nowrap;flex-shrink:0}
+  cursor:pointer;font-family:var(--font);transition:all .15s;white-space:nowrap;flex-shrink:0
+}
 .fb.a0{background:var(--bg3);color:var(--text)}
 .fb.a1{background:rgba(88,166,255,.15);color:var(--bus1);border-color:var(--bus1)}
 .fb.a2{background:rgba(63,185,80,.15);color:var(--bus2);border-color:var(--bus2)}
 .fb.a3{background:rgba(240,136,62,.15);color:var(--bus3);border-color:var(--bus3)}
 
-/* ══ WRAPPER ═════════════════════════════════════════════ */
-#wrapper{position:fixed;top:124px;left:0;right:0;bottom:0;display:flex}
+/* ══ WRAPPER MAPA + SIDEBAR ══════════════════════ */
+#wrapper{
+  position:fixed;left:0;right:0;bottom:0;
+  display:flex;
+}
+@media(min-width:769px){#wrapper{top:calc(48px + 38px + 40px)}} /* 126px */
+@media(max-width:768px){#wrapper{top:calc(48px + 96px + 40px)}} /* 184px */
 
-/* SIDEBAR desktop */
-#sidebar{width:275px;flex-shrink:0;background:var(--bg2);
-  border-right:1px solid var(--border);display:flex;flex-direction:column;
-  overflow-y:auto;height:100%}
+/* Sidebar desktop */
+#sidebar{
+  width:275px;flex-shrink:0;
+  background:var(--bg2);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow-y:auto;height:100%
+}
+@media(max-width:768px){#sidebar{display:none}}
+
+/* Mapa */
 #mapwrap{flex:1;position:relative;height:100%}
 #map{position:absolute;inset:0}
 
-/* Sidebar contenido */
+/* ══ SIDEBAR contenido ═══════════════════════════ */
 .ss{padding:10px 12px;border-bottom:1px solid var(--border);flex-shrink:0}
 .st{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
   color:var(--text3);margin-bottom:7px}
@@ -84,8 +136,7 @@ select option{background:var(--bg3)}
 .kl{font-size:9px;color:var(--text3);font-weight:600;text-transform:uppercase;
   letter-spacing:.06em;margin-bottom:2px}
 .kv{font-size:16px;font-weight:600;font-family:var(--mono)}
-.g{color:var(--green)}.b{color:var(--blue)}.o{color:var(--orange)}
-.r{color:var(--red)}.w{color:var(--text)}
+.g{color:var(--green)}.b{color:var(--blue)}.o{color:var(--orange)}.r{color:var(--red)}.w{color:var(--text)}
 .ks{font-size:9px;color:var(--text3);margin-top:1px}
 .bc{background:var(--bg3);border-radius:7px;padding:8px 10px;
   border-left:3px solid var(--border2);margin-bottom:4px;cursor:pointer;transition:background .12s}
@@ -97,11 +148,11 @@ select option{background:var(--bg3)}
 .cc{background:var(--bg3);border-radius:7px;padding:8px;border:1px solid var(--border)}
 .ct{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;
   color:var(--text3);margin-bottom:4px;display:flex;justify-content:space-between}
-.ct-sub{font-family:var(--mono);font-size:9px;color:var(--blue);
-  font-weight:400;text-transform:none;letter-spacing:0}
+.ct-sub{font-family:var(--mono);font-size:9px;color:var(--blue);font-weight:400;
+  text-transform:none;letter-spacing:0}
 .cw{position:relative;height:88px}
 
-/* Overlays mapa */
+/* ══ MAPA overlays ═══════════════════════════════ */
 .mi{position:absolute;top:10px;right:10px;z-index:400;
   background:rgba(13,17,23,.92);backdrop-filter:blur(8px);
   border:1px solid var(--border2);border-radius:8px;padding:9px 11px}
@@ -115,63 +166,14 @@ select option{background:var(--bg3)}
   padding:5px 10px;font-size:11px;color:var(--text);font-family:var(--mono);display:none}
 .map-badge b{color:var(--green)}
 
-/* ══ MÓVIL ════════════════════════════════════════════════
-   En móvil:
-   - topbar fija (48px)
-   - barra de filtros en 2 filas (96px total)
-   - pills (38px)
-   Total fijo arriba: 182px
-   Mapa: resto hasta bottom
-   Panel desde abajo
-*/
-@media(max-width:768px){
-  :root{--topbar-h:48px}
-  #filtros-desk{display:none}
-  #filtros-mob{display:flex}
-  #pills{top:calc(var(--topbar-h) + 96px)} /* debajo de las 2 filas de filtros */
-  #wrapper{top:calc(var(--topbar-h) + 96px + 38px)} /* topbar + filtros + pills */
-  #sidebar{display:none}
-  #mapwrap{height:100%;flex:1}
-  .mobile-panel{display:block}
-  .fab{display:flex}
-}
-@media(min-width:769px){
-  #filtros-mob{display:none!important}
-  .mobile-panel,.fab{display:none!important}
-}
-
-/* ══ FILTROS MÓVIL — 2 filas ════════════════════════════ */
-#filtros-mob{
-  position:fixed;top:var(--topbar-h);left:0;right:0;z-index:999;
-  background:var(--bg2);border-bottom:1px solid var(--border);
-  flex-direction:column;padding:6px 12px;gap:6px;
-  display:none; /* mostrado por media query */
-}
-.fila{display:flex;gap:8px;align-items:center}
-.sel-bloque{
-  flex:1;display:flex;align-items:center;gap:5px;
-  background:var(--bg3);border:1px solid var(--border2);
-  border-radius:8px;padding:7px 10px;min-width:0;
-}
-.sel-bloque .fg-label{font-size:10px;color:var(--text3);font-weight:600;
-  text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;flex-shrink:0}
-.sel-bloque select{
-  flex:1;min-width:0;padding:0;background:transparent;border:none;
-  color:var(--text);font-size:12px;font-family:var(--font);
-  cursor:pointer;outline:none;
-}
-
-/* ══ PANEL MÓVIL ════════════════════════════════════════ */
-.mobile-panel{
+/* ══ PANEL MÓVIL ═════════════════════════════════ */
+.mpanel{
   position:fixed;bottom:0;left:0;right:0;z-index:1100;
   background:var(--bg2);border-top:2px solid var(--border2);
-  border-radius:14px 14px 0 0;
-  max-height:70vh;overflow-y:auto;
-  transform:translateY(100%);
-  transition:transform .28s cubic-bezier(.4,0,.2,1);
-  display:none;
+  border-radius:14px 14px 0 0;max-height:68vh;overflow-y:auto;
+  transform:translateY(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);
 }
-.mobile-panel.open{transform:translateY(0)}
+.mpanel.open{transform:translateY(0)}
 .ph{width:32px;height:4px;background:var(--bg4);border-radius:2px;
   margin:9px auto 5px;cursor:pointer}
 .ptabs{display:flex;border-bottom:1px solid var(--border);padding:0 14px}
@@ -179,12 +181,16 @@ select option{background:var(--bg3)}
   text-align:center;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s}
 .ptab.active{color:var(--text);border-bottom-color:var(--green)}
 .pcontent{padding:12px 14px 24px}
-.fab{position:fixed;bottom:18px;right:16px;z-index:1050;
+.fab{
+  position:fixed;bottom:18px;right:16px;z-index:1050;
   width:48px;height:48px;border-radius:24px;
   background:var(--green);color:#000;font-size:18px;font-weight:700;
   border:none;cursor:pointer;box-shadow:0 4px 16px rgba(63,185,80,.4);
-  display:none;align-items:center;justify-content:center;transition:transform .15s}
+  align-items:center;justify-content:center;transition:transform .15s;
+}
 .fab:active{transform:scale(.92)}
+@media(max-width:768px){.fab{display:flex}}
+@media(min-width:769px){.fab,.mpanel{display:none!important}}
 
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:2px}
@@ -198,57 +204,28 @@ select option{background:var(--bg3)}
   <div class="badge"><span class="dot"></span>Dashboard Operacional</div>
 </div>
 
-<!-- FILTROS DESKTOP (1 fila en topbar extendida) -->
-<div id="filtros-desk">
-  <div class="fg">
+<!-- FILTROS — mismos elementos, CSS adapta el layout -->
+<div id="filtros">
+  <div class="fg" id="fg-mes">
     <span class="fg-label">Mes</span>
-    <select id="sel-mes-d">
+    <select id="sel-mes">
       <option value="todos">Todos</option>
       <option value="2024-08">Agosto</option>
       <option value="2024-09">Septiembre</option>
       <option value="2024-10">Octubre</option>
     </select>
   </div>
-  <div class="fg">
-    <span class="fg-label">Día</span>
-    <select id="sel-dia-d"><option value="todos">Todos</option></select>
-  </div>
-  <div class="fg">
+  <div class="fg" id="fg-capa">
     <span class="fg-label">Ver</span>
-    <select id="sel-capa-d">
+    <select id="sel-capa">
       <option value="in_p">Subidas</option>
       <option value="out_p">Bajadas</option>
       <option value="ocup">Ocupación</option>
     </select>
   </div>
-</div>
-
-<!-- FILTROS MÓVIL (2 filas completas, cada select ocupa su espacio) -->
-<div id="filtros-mob">
-  <div class="fila">
-    <div class="sel-bloque">
-      <span class="fg-label">Mes</span>
-      <select id="sel-mes-m">
-        <option value="todos">Todos los meses</option>
-        <option value="2024-08">Agosto 2024</option>
-        <option value="2024-09">Septiembre 2024</option>
-        <option value="2024-10">Octubre 2024</option>
-      </select>
-    </div>
-    <div class="sel-bloque">
-      <span class="fg-label">Ver</span>
-      <select id="sel-capa-m">
-        <option value="in_p">Subidas</option>
-        <option value="out_p">Bajadas</option>
-        <option value="ocup">Ocupación</option>
-      </select>
-    </div>
-  </div>
-  <div class="fila">
-    <div class="sel-bloque" style="flex:1">
-      <span class="fg-label">Día</span>
-      <select id="sel-dia-m" style="width:100%"><option value="todos">Todos los días</option></select>
-    </div>
+  <div class="fg" id="fg-dia">
+    <span class="fg-label">Día</span>
+    <select id="sel-dia"><option value="todos">Todos los días</option></select>
   </div>
 </div>
 
@@ -262,6 +239,7 @@ select option{background:var(--bg3)}
 
 <!-- WRAPPER -->
 <div id="wrapper">
+
   <!-- SIDEBAR desktop -->
   <div id="sidebar">
     <div class="ss">
@@ -301,7 +279,7 @@ select option{background:var(--bg3)}
 <button class="fab" id="fab" onclick="togglePanel()">☰</button>
 
 <!-- PANEL MÓVIL -->
-<div class="mobile-panel" id="mpanel">
+<div class="mpanel" id="mpanel">
   <div class="ph" onclick="closePanel()"></div>
   <div class="ptabs">
     <div class="ptab active" onclick="switchTab('kpis')">Indicadores</div>
@@ -311,9 +289,18 @@ select option{background:var(--bg3)}
   <div class="pcontent">
     <div id="tab-kpis"><div class="kg" id="kpi-m" style="margin-top:4px"></div></div>
     <div id="tab-charts" style="display:none">
-      <div class="cc" style="margin-bottom:8px"><div class="ct">Pasajeros diarios <span class="ct-sub" id="csub-dem-m"></span></div><div class="cw"><canvas id="c-dem-m"></canvas></div></div>
-      <div class="cc" style="margin-bottom:8px"><div class="ct">Vueltas por día</div><div class="cw"><canvas id="c-vuel-m"></canvas></div></div>
-      <div class="cc"><div class="ct">Subidas por hora <span class="ct-sub" id="csub-hora-m"></span></div><div class="cw"><canvas id="c-hora-m"></canvas></div></div>
+      <div class="cc" style="margin-bottom:8px">
+        <div class="ct">Pasajeros diarios <span class="ct-sub" id="csub-dem-m"></span></div>
+        <div class="cw"><canvas id="c-dem-m"></canvas></div>
+      </div>
+      <div class="cc" style="margin-bottom:8px">
+        <div class="ct">Vueltas por día</div>
+        <div class="cw"><canvas id="c-vuel-m"></canvas></div>
+      </div>
+      <div class="cc">
+        <div class="ct">Subidas por hora <span class="ct-sub" id="csub-hora-m"></span></div>
+        <div class="cw"><canvas id="c-hora-m"></canvas></div>
+      </div>
     </div>
     <div id="tab-buses" style="display:none"><div id="cards-m"></div></div>
   </div>
@@ -329,11 +316,20 @@ const H=[{"VehicleID": "BUS-GKZB98", "hora": 1, "IN_global": 1}, {"VehicleID": "
 const FECHAS=["2024-08-01", "2024-08-02", "2024-08-03", "2024-08-04", "2024-08-05", "2024-08-06", "2024-08-07", "2024-08-08", "2024-08-09", "2024-08-10", "2024-08-11", "2024-08-12", "2024-08-13", "2024-08-14", "2024-08-15", "2024-08-16", "2024-08-17", "2024-08-18", "2024-08-19", "2024-08-20", "2024-08-21", "2024-08-22", "2024-08-23", "2024-08-24", "2024-08-25", "2024-08-26", "2024-08-27", "2024-08-28", "2024-08-29", "2024-08-30", "2024-08-31", "2024-09-01", "2024-09-02", "2024-09-03", "2024-09-04", "2024-09-05", "2024-09-06", "2024-09-07", "2024-09-08", "2024-09-09", "2024-09-10", "2024-09-11", "2024-09-12", "2024-09-13", "2024-09-14", "2024-09-15", "2024-09-16", "2024-09-17", "2024-09-18", "2024-09-19", "2024-09-20", "2024-09-21", "2024-09-22", "2024-09-23", "2024-09-24", "2024-09-25", "2024-09-26", "2024-09-27", "2024-09-28", "2024-09-29", "2024-09-30", "2024-10-01", "2024-10-02", "2024-10-03", "2024-10-04", "2024-10-05", "2024-10-06", "2024-10-07", "2024-10-08", "2024-10-09", "2024-10-10", "2024-10-11", "2024-10-12", "2024-10-13", "2024-10-14", "2024-10-15", "2024-10-16", "2024-10-17", "2024-10-18", "2024-10-19", "2024-10-20", "2024-10-21", "2024-10-22", "2024-10-23", "2024-10-24", "2024-10-25", "2024-10-26", "2024-10-27", "2024-10-28", "2024-10-29", "2024-10-30", "2024-10-31"];
 const BC={'BUS-GKZB98':'#58a6ff','BUS-KDVX34':'#3fb950','BUS-KGBT83':'#f0883e'};
 const BUSES=['BUS-GKZB98','BUS-KDVX34','BUS-KGBT83'];
-
 let activeBus='todos',activeMes='todos',activeDia='todos',activeCapa='in_p';
 let mapLayer=null,charts={};
 
-// ── MAPA ──────────────────────────────────────────────────
+// ── AJUSTAR ALTURA FILTROS para pills y wrapper ───────────
+function ajustarLayout(){
+  const filtrosH=document.getElementById('filtros').offsetHeight;
+  const pillsTop=48+filtrosH;
+  const wrapperTop=48+filtrosH+40;
+  document.getElementById('pills').style.top=pillsTop+'px';
+  document.getElementById('wrapper').style.top=wrapperTop+'px';
+  setTimeout(()=>map.invalidateSize(),50);
+}
+
+// ── MAPA ─────────────────────────────────────────────────
 const map=L.map('map',{center:[-33.45,-70.75],zoom:10,preferCanvas:true});
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
   attribution:'© OpenStreetMap © CARTO',subdomains:'abcd',maxZoom:19
@@ -341,39 +337,28 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
 const ps=document.createElement('style');
 ps.textContent='.dp .leaflet-popup-content-wrapper{background:rgba(13,17,23,.97);border:1px solid #30363d;border-radius:8px;color:#e6edf3;box-shadow:0 4px 20px rgba(0,0,0,.6)}.dp .leaflet-popup-tip{background:rgba(13,17,23,.97)}.leaflet-popup-content{margin:10px 13px;font-size:12px}.pr{display:flex;justify-content:space-between;margin-bottom:3px;color:#8b949e}.pr b{color:#e6edf3;font-family:JetBrains Mono,monospace;font-weight:500}';
 document.head.appendChild(ps);
-window.addEventListener('load',()=>setTimeout(()=>map.invalidateSize(),150));
-window.addEventListener('resize',()=>setTimeout(()=>map.invalidateSize(),150));
-
-// ── SINCRONIZAR SELECTORES DESKTOP ↔ MÓVIL ───────────────
-function syncSelects(id, val){
-  ['d','m'].forEach(s=>{
-    const el=document.getElementById(id+'-'+s);
-    if(el&&el.value!==val)el.value=val;
-  });
-}
+window.addEventListener('load',()=>{ajustarLayout();setTimeout(()=>map.invalidateSize(),200);});
+window.addEventListener('resize',()=>{ajustarLayout();setTimeout(()=>map.invalidateSize(),200);});
 
 // ── HELPERS ───────────────────────────────────────────────
 const getBuses=()=>activeBus==='todos'?BUSES:[activeBus];
 const getFechas=()=>activeDia!=='todos'?[activeDia]:activeMes!=='todos'?FECHAS.filter(f=>f.startsWith(activeMes)):FECHAS;
 
-// ── POBLAR DÍAS ───────────────────────────────────────────
+// ── DÍAS ─────────────────────────────────────────────────
 function poblarDias(){
+  const sel=document.getElementById('sel-dia');
   const ff=activeMes==='todos'?FECHAS:FECHAS.filter(f=>f.startsWith(activeMes));
   const dias=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
-  ['d','m'].forEach(s=>{
-    const sel=document.getElementById('sel-dia-'+s);
-    if(!sel)return;
-    while(sel.options.length>1)sel.remove(1);
-    ff.forEach(f=>{
-      const o=document.createElement('option');o.value=f;
-      const dt=new Date(f+'T12:00:00');
-      o.textContent=dias[dt.getDay()]+' '+f.slice(8);
-      sel.appendChild(o);
-    });
-    if(activeDia!=='todos'&&!ff.includes(activeDia))sel.value='todos';
-    else if(activeDia!=='todos')sel.value=activeDia;
+  while(sel.options.length>1)sel.remove(1);
+  ff.forEach(f=>{
+    const o=document.createElement('option');o.value=f;
+    const dt=new Date(f+'T12:00:00');
+    o.textContent=dias[dt.getDay()]+' '+f.slice(8);
+    sel.appendChild(o);
   });
-  if(activeDia!=='todos'&&!ff.includes(activeDia))activeDia='todos';
+  if(activeDia!=='todos'&&ff.includes(activeDia))sel.value=activeDia;
+  else{activeDia='todos';sel.value='todos';}
+  setTimeout(ajustarLayout,50);
 }
 
 // ── KPIs ─────────────────────────────────────────────────
@@ -452,7 +437,7 @@ function renderMap(){
   }else if(activeMes!=='todos'){
     const mn={'2024-08':'Agosto','2024-09':'Septiembre','2024-10':'Octubre'};
     t.textContent='📅 '+mn[activeMes]+' 2024';b.style.display='block';
-  }else{b.style.display='none';}
+  }else b.style.display='none';
 }
 
 // ── CHARTS ───────────────────────────────────────────────
@@ -467,7 +452,6 @@ const CO={responsive:true,maintainAspectRatio:false,
 };
 function buildCharts(sfx){
   const buses=getBuses(),fechas=getFechas(),horas=Array.from({length:24},(_,i)=>i);
-  // Chart 1
   const cDemEl=document.getElementById('c-dem-'+sfx);
   if(!cDemEl)return;
   if(charts['d'+sfx])charts['d'+sfx].destroy();
@@ -490,7 +474,6 @@ function buildCharts(sfx){
       options:{...CO,plugins:{...CO.plugins,tooltip:{...CO.plugins.tooltip,callbacks:{label:c=>' '+c.parsed.y+' pax'}}}}
     });
   }
-  // Chart 2
   const cVuelEl=document.getElementById('c-vuel-'+sfx);
   if(cVuelEl){
     if(charts['v'+sfx])charts['v'+sfx].destroy();
@@ -502,7 +485,6 @@ function buildCharts(sfx){
       options:{...CO,plugins:{...CO.plugins,tooltip:{...CO.plugins.tooltip,callbacks:{label:c=>' '+c.parsed.y+' vueltas'}}}}
     });
   }
-  // Chart 3
   const cHoraEl=document.getElementById('c-hora-'+sfx);
   if(cHoraEl){
     if(charts['h'+sfx])charts['h'+sfx].destroy();
@@ -526,16 +508,14 @@ function buildCharts(sfx){
     });
   }
 }
-function renderCharts(){
-  buildCharts(window.innerWidth<=768?'m':'d');
-}
+function renderCharts(){buildCharts(window.innerWidth<=768?'m':'d');}
 
 // ── PANEL MÓVIL ───────────────────────────────────────────
 function togglePanel(){
   const p=document.getElementById('mpanel'),f=document.getElementById('fab');
   p.classList.toggle('open');
   f.textContent=p.classList.contains('open')?'✕':'☰';
-  if(p.classList.contains('open')){setTimeout(()=>map.invalidateSize(),300);renderCharts();}
+  if(p.classList.contains('open')){setTimeout(()=>{map.invalidateSize();renderCharts();},300);}
 }
 function closePanel(){
   document.getElementById('mpanel').classList.remove('open');
@@ -561,33 +541,11 @@ function filterBus(bus){
   });
   update();
 }
-
-// Sincronizar mes
-function onMesChange(val){
-  activeMes=val;activeDia='todos';
-  syncSelects('sel-mes',val);
-  poblarDias();
-  syncSelects('sel-dia','todos');
-  update();
-}
-// Sincronizar día
-function onDiaChange(val){
-  activeDia=val;
-  syncSelects('sel-dia',val);
-  update();
-}
-// Sincronizar capa
-function onCapaChange(val){
-  activeCapa=val;
-  syncSelects('sel-capa',val);
-  renderMap();
-}
-
-['d','m'].forEach(s=>{
-  document.getElementById('sel-mes-'+s)?.addEventListener('change',e=>onMesChange(e.target.value));
-  document.getElementById('sel-dia-'+s)?.addEventListener('change',e=>onDiaChange(e.target.value));
-  document.getElementById('sel-capa-'+s)?.addEventListener('change',e=>onCapaChange(e.target.value));
+document.getElementById('sel-mes').addEventListener('change',e=>{
+  activeMes=e.target.value;activeDia='todos';poblarDias();update();
 });
+document.getElementById('sel-dia').addEventListener('change',e=>{activeDia=e.target.value;update();});
+document.getElementById('sel-capa').addEventListener('change',e=>{activeCapa=e.target.value;renderMap();});
 
 function update(){renderKPIs();renderBusCards();renderMap();renderCharts();}
 
