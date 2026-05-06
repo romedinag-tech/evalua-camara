@@ -3,157 +3,274 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard Movilidad — Gran Concepción 2017</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Dashboard Movilidad — Gran Concepción 2015</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#08090d;--bg2:#0f1117;--bg3:#171923;--bg4:#1e2230;
-  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
-  --text:#eeeaf5;--text2:#8a87a0;--text3:#4f4d60;
-  --c1:#5ee7b0;--c2:#6ec6ff;--c3:#ffd166;--c4:#ff6b8a;--c5:#b794f4;
-  --c1d:rgba(94,231,176,0.12);--c2d:rgba(110,198,255,0.12);
-  --c3d:rgba(255,209,102,0.12);--c4d:rgba(255,107,138,0.12);--c5d:rgba(183,148,244,0.12);
-  --font:'Syne',sans-serif;--mono:'DM Mono',monospace;
-  --r:10px;--r-sm:6px;
+  /* SECTRA institutional palette */
+  --navy:    #002855;
+  --navy2:   #003d80;
+  --blue:    #1464A5;
+  --blue2:   #1a7cc7;
+  --orange:  #E8521A;
+  --orange2: #f06030;
+  --bg:      #F0F4F8;
+  --bg2:     #FFFFFF;
+  --bg3:     #EBF0F7;
+  --bg4:     #DDE5EF;
+  --border:  #C8D4E3;
+  --border2: #B0C0D6;
+  --text:    #1A2B3C;
+  --text2:   #4A5E72;
+  --text3:   #7A8FA3;
+  --green:   #2E7D4F;
+  --red:     #C0392B;
+  --gold:    #B07D0A;
+  /* chart colors adapted */
+  --c1:  #1464A5;
+  --c2:  #E8521A;
+  --c3:  #2E7D4F;
+  --c4:  #8B3A8B;
+  --c5:  #B07D0A;
+  --c1d: rgba(20,100,165,0.10);
+  --c2d: rgba(232,82,26,0.10);
+  --c3d: rgba(46,125,79,0.10);
+  --r:   8px;
+  --r-sm:4px;
+  --font:'Roboto',sans-serif;
+  --mono:'Roboto Mono',monospace;
+  --shadow:0 1px 4px rgba(0,40,85,0.10),0 2px 8px rgba(0,40,85,0.07);
+  --shadow-md:0 3px 12px rgba(0,40,85,0.13),0 6px 20px rgba(0,40,85,0.08);
 }
-html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px}
-body{background:radial-gradient(ellipse 80% 50% at 15% -5%,rgba(94,231,176,0.04) 0%,transparent 55%),radial-gradient(ellipse 60% 40% at 85% 110%,rgba(110,198,255,0.04) 0%,transparent 55%),var(--bg)}
+html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.5}
 
-/* PAGE */
-.page{max-width:1400px;margin:0 auto;padding:0 24px 80px}
+/* ── INSTITUTIONAL HEADER BAR ── */
+.gov-bar{background:var(--navy);color:#fff;padding:7px 0;font-size:11px;letter-spacing:.02em}
+.gov-bar-inner{max-width:1400px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:10px}
+.gov-bar img{height:22px}
+.gov-bar-name{font-weight:500;opacity:.85}
+.gov-bar-sep{opacity:.3;margin:0 6px}
 
-/* HEADER */
-header{padding:40px 0 32px;border-bottom:1px solid var(--border);margin-bottom:32px;display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap}
-.eyebrow{font-size:10px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--c1);margin-bottom:8px;display:flex;align-items:center;gap:8px}
-.eyebrow::before{content:'';width:20px;height:1px;background:var(--c1)}
-h1{font-size:clamp(24px,3vw,38px);font-weight:800;line-height:1.05;letter-spacing:-.02em}
-h1 span{color:var(--c1)}
-.header-sub{font-size:13px;color:var(--text2);margin-top:8px;line-height:1.6}
-.header-badge{display:flex;align-items:center;gap:6px;background:var(--c1d);border:1px solid rgba(94,231,176,0.2);border-radius:100px;padding:7px 14px;font-size:11px;color:var(--c1);font-weight:500}
-.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--c1);animation:pulse 2s ease infinite}
+/* ── PAGE ── */
+.page{max-width:1400px;margin:0 auto;padding:0 24px 60px}
+
+/* ── MAIN HEADER ── */
+.site-header{
+  background:var(--bg2);
+  border-bottom:3px solid var(--navy);
+  box-shadow:var(--shadow);
+  margin-bottom:24px;
+  padding:0 24px;
+}
+.site-header-inner{
+  max-width:1400px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 0;gap:20px;flex-wrap:wrap;
+}
+.site-logo-area{display:flex;align-items:center;gap:16px}
+.logo-box{
+  width:48px;height:48px;border-radius:6px;
+  background:var(--navy);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+  box-shadow:0 2px 6px rgba(0,40,85,.25);
+}
+.site-title{font-size:20px;font-weight:700;color:var(--navy);letter-spacing:-.01em;line-height:1.2}
+.site-subtitle{font-size:12px;color:var(--text2);margin-top:2px}
+.site-badge{
+  display:flex;align-items:center;gap:7px;
+  background:var(--c1d);border:1px solid rgba(20,100,165,.2);
+  border-radius:4px;padding:6px 12px;font-size:11px;color:var(--blue);font-weight:500;
+}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--blue);animation:pulse 2s ease infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
 
-/* NAV */
-.nav-tabs{display:flex;gap:4px;margin-bottom:28px;border-bottom:1px solid var(--border);overflow-x:auto}
-.nav-tab{font-family:var(--font);font-size:11px;font-weight:600;padding:9px 16px;border-radius:8px 8px 0 0;border:1px solid transparent;border-bottom:none;background:transparent;color:var(--text3);cursor:pointer;transition:all .15s;letter-spacing:.05em;white-space:nowrap;position:relative;top:1px}
-.nav-tab:hover{color:var(--text2);background:var(--bg2)}
-.nav-tab.active{background:var(--bg2);color:var(--c1);border-color:var(--border);border-bottom-color:var(--bg2)}
+/* ── NAV TABS ── */
+.nav-bar{
+  background:var(--bg2);
+  border-bottom:1px solid var(--border);
+  box-shadow:0 1px 3px rgba(0,40,85,.06);
+  margin-bottom:24px;
+  overflow-x:auto;
+}
+.nav-bar::-webkit-scrollbar{height:0}
+.nav-tabs{display:flex;max-width:1400px;margin:0 auto;padding:0 24px}
+.nav-tab{
+  font-family:var(--font);font-size:12px;font-weight:500;
+  padding:13px 18px;border:none;border-bottom:3px solid transparent;
+  background:transparent;color:var(--text3);cursor:pointer;
+  transition:all .15s;white-space:nowrap;letter-spacing:.01em;
+  position:relative;
+}
+.nav-tab:hover{color:var(--blue);background:var(--bg3)}
+.nav-tab.active{color:var(--navy);font-weight:600;border-bottom-color:var(--orange)}
 .tab-section{display:none}
 .tab-section.active{display:block}
 
-/* KPI GRID */
-.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;background:var(--border);border-radius:var(--r);overflow:hidden;border:1px solid var(--border);margin-bottom:24px}
-.kpi-card{background:var(--bg2);padding:18px 16px;position:relative;overflow:hidden;transition:background .2s}
-.kpi-card:hover{background:var(--bg3)}
-.kpi-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--kc,transparent);opacity:.7}
-.kpi-label{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
-.kpi-value{font-family:var(--mono);font-size:24px;font-weight:500;line-height:1;margin-bottom:5px}
-.kpi-sub{font-size:10px;color:var(--text3);font-family:var(--mono)}
+/* ── KPI GRID ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:22px}
+.kpi-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);
+  padding:18px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden;
+  transition:box-shadow .2s,transform .15s;
+}
+.kpi-card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--kc,var(--blue))}
+.kpi-label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:9px}
+.kpi-value{font-family:var(--mono);font-size:26px;font-weight:600;line-height:1;color:var(--navy);margin-bottom:5px}
+.kpi-sub{font-size:10px;color:var(--text3)}
 
-/* PANELS */
-.panel-grid{display:grid;gap:20px}
+/* ── PANELS ── */
+.panel-grid{display:grid;gap:16px}
 .g2{grid-template-columns:1fr 1fr}
 .g3{grid-template-columns:1fr 1fr 1fr}
 .g21{grid-template-columns:2fr 1fr}
 .g12{grid-template-columns:1fr 2fr}
 @media(max-width:900px){.g2,.g3,.g21,.g12{grid-template-columns:1fr}}
-.panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
-.panel-hdr{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.panel-title{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text2)}
-.panel-sub{font-size:10px;color:var(--text3);font-family:var(--mono)}
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.panel-hdr{
+  padding:13px 18px;background:var(--bg3);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+}
+.panel-title{font-size:12px;font-weight:600;color:var(--navy);letter-spacing:.03em;text-transform:uppercase}
+.panel-sub{font-size:10px;color:var(--text3)}
 .panel-body{padding:18px}
 .chart-wrap{position:relative;height:260px}
 .chart-wrap.tall{height:320px}
 .chart-wrap.sm{height:180px}
 
-/* PARTICIÓN MODAL BARS */
+/* ── MODAL BARS ── */
 .modal-bars{display:flex;flex-direction:column;gap:10px;padding:18px}
 .modal-row{display:flex;align-items:center;gap:10px}
-.modal-label{width:110px;font-size:12px;color:var(--text2);flex-shrink:0;white-space:nowrap}
-.modal-track{flex:1;height:22px;background:var(--bg4);border-radius:4px;overflow:hidden;position:relative}
-.modal-fill{height:100%;border-radius:4px;transition:width .6s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;padding-left:8px}
-.modal-pct{font-family:var(--mono);font-size:11px;font-weight:500;white-space:nowrap}
+.modal-label{width:120px;font-size:12px;color:var(--text2);flex-shrink:0}
+.modal-track{flex:1;height:24px;background:var(--bg4);border-radius:3px;overflow:hidden}
+.modal-fill{height:100%;border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;padding-left:8px}
+.modal-pct{font-family:var(--mono);font-size:11px;font-weight:600;color:#fff}
 
-/* GRUPO CARDS */
-.grupo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
-.grupo-card{background:var(--bg3);border-radius:var(--r-sm);padding:16px;border:1px solid var(--border)}
-.grupo-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:12px;line-height:1.3}
-.grupo-stat{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border)}
+/* ── GRUPO CARDS ── */
+.grupo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.grupo-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px;box-shadow:var(--shadow)}
+.grupo-name{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:12px;line-height:1.3;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.grupo-stat{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--bg4)}
 .grupo-stat:last-child{border-bottom:none}
 .gs-label{font-size:11px;color:var(--text3)}
-.gs-val{font-family:var(--mono);font-size:12px;font-weight:500}
+.gs-val{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--navy)}
 
-/* SELECTOR */
+/* ── SELECTORS ── */
 .sel-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-.sel-btn{font-family:var(--font);font-size:11px;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text3);cursor:pointer;transition:all .15s;white-space:nowrap}
-.sel-btn:hover{color:var(--text2)}
-.sel-btn.active{background:var(--c2d);color:var(--c2);border-color:rgba(110,198,255,.3)}
-select.sel{padding:5px 10px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r-sm);color:var(--text);font-family:var(--font);font-size:12px;cursor:pointer;outline:none}
-select.sel option{background:var(--bg3)}
+.sel-btn{font-family:var(--font);font-size:11px;font-weight:500;padding:5px 13px;border-radius:3px;border:1px solid var(--border2);background:var(--bg2);color:var(--text2);cursor:pointer;transition:all .15s}
+.sel-btn:hover{color:var(--blue);border-color:var(--blue)}
+.sel-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+select.sel{padding:6px 10px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r-sm);color:var(--text);font-family:var(--font);font-size:12px;cursor:pointer;outline:none}
+select.sel:focus{border-color:var(--blue)}
 
-/* MAP */
-#desire-map{height:420px;width:100%}
-.leaflet-container{background:#0f1117}
+/* ── MAP ── */
+#desire-map{height:440px;width:100%}
 
-/* INDICADORES PROPUESTOS */
-.prop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-.prop-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:20px;position:relative;overflow:hidden}
-.prop-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:var(--pc,var(--c1))}
-.prop-num{font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:8px}
-.prop-name{font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px}
-.prop-val{font-family:var(--mono);font-size:28px;font-weight:500;line-height:1;margin-bottom:6px}
-.prop-desc{font-size:12px;color:var(--text2);line-height:1.6}
-.prop-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;margin-top:8px;text-transform:uppercase;letter-spacing:.07em}
+/* ── INDICATOR CARDS ── */
+.prop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px}
+.prop-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);
+  padding:20px;box-shadow:var(--shadow);position:relative;overflow:hidden;
+}
+.prop-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:4px;background:var(--pc,var(--blue))}
+.prop-num{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
+.prop-name{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:10px;line-height:1.3}
+.prop-val{font-family:var(--mono);font-size:32px;font-weight:600;line-height:1;margin-bottom:8px}
+.prop-desc{font-size:12px;color:var(--text2);line-height:1.7}
+.prop-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:3px 8px;border-radius:3px;margin-top:10px;text-transform:uppercase;letter-spacing:.07em;border:1px solid currentColor}
 
-/* FOOTER */
-footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--border);font-size:11px;color:var(--text3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+/* ── SECTION TITLE ── */
+.section-intro{
+  background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);
+  color:#fff;border-radius:var(--r);padding:18px 22px;margin-bottom:20px;
+  display:flex;gap:14px;align-items:center;
+}
+.si-icon{font-size:22px;flex-shrink:0}
+.si-title{font-size:14px;font-weight:700;margin-bottom:3px}
+.si-sub{font-size:11px;opacity:.8;line-height:1.5}
 
-/* SCROLL */
-::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
+/* ── FOOTER ── */
+.site-footer{
+  background:var(--navy);color:rgba(255,255,255,.6);
+  padding:20px 0;margin-top:40px;font-size:11px;
+}
+.site-footer-inner{max-width:1400px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.site-footer a{color:rgba(255,255,255,.6)}
+
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg4)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--text3)}
 </style>
 </head>
 <body>
-<div class="page">
 
-<header>
-  <div>
-    <div class="eyebrow">Encuesta Origen-Destino 2017</div>
-    <h1>Movilidad <span>Gran Concepción</span></h1>
-    <p class="header-sub">26.328 personas · 47.580 viajes registrados · 9 comunas del área metropolitana</p>
+<!-- GOV BAR -->
+<div class="gov-bar">
+  <div class="gov-bar-inner">
+    <span>🇨🇱</span>
+    <span class="gov-bar-name">Ministerio de Transportes y Telecomunicaciones</span>
+    <span class="gov-bar-sep">|</span>
+    <span>SECTRA — Secretaría de Planificación de Transporte</span>
   </div>
-  <div class="header-badge"><span class="badge-dot"></span>BDEOD Gran Concepción</div>
-</header>
-
-<div class="nav-tabs">
-  <button class="nav-tab active" onclick="showTab('resumen')">📊 Resumen</button>
-  <button class="nav-tab" onclick="showTab('distancia')">📏 Distancia</button>
-  <button class="nav-tab" onclick="showTab('grupos')">👥 Grupos</button>
-  <button class="nav-tab" onclick="showTab('comunas')">🏙️ Comunas</button>
-  <button class="nav-tab" onclick="showTab('deseos')">🗺️ Líneas de Deseo</button>
-  <button class="nav-tab" onclick="showTab('indicadores')">💡 Indicadores Propuestos</button>
 </div>
+
+<!-- SITE HEADER -->
+<div class="site-header">
+  <div class="site-header-inner">
+    <div class="site-logo-area">
+      <div class="logo-box">🚌</div>
+      <div>
+        <div class="site-title">Dashboard Movilidad — Gran Concepción</div>
+        <div class="site-subtitle">Encuesta Origen-Destino 2015 · Área Metropolitana de Concepción</div>
+      </div>
+    </div>
+    <div class="site-badge"><span class="badge-dot"></span>BDEOD Gran Concepción 2015</div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav-bar">
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showTab('resumen')">📊 Resumen General</button>
+    <button class="nav-tab" onclick="showTab('distancia')">📏 Distribución Distancia</button>
+    <button class="nav-tab" onclick="showTab('grupos')">👥 Grupos Socioeconómicos</button>
+    <button class="nav-tab" onclick="showTab('comunas')">🏙️ Análisis por Comuna</button>
+    <button class="nav-tab" onclick="showTab('deseos')">🗺️ Líneas de Deseo</button>
+    <button class="nav-tab" onclick="showTab('indicadores')">💡 Indicadores Propuestos</button>
+  </div>
+</div>
+
+<div class="page">
 
 <!-- ══ RESUMEN ══ -->
 <div id="sec-resumen" class="tab-section active">
+  <div class="section-intro">
+    <span class="si-icon">📊</span>
+    <div><div class="si-title">Resumen General de Movilidad</div>
+    <div class="si-sub">Indicadores globales de la encuesta · 26.328 personas encuestadas · 9 comunas del área metropolitana</div></div>
+  </div>
   <div class="kpi-grid">
-    <div class="kpi-card" style="--kc:var(--c1)"><div class="kpi-label">Tasa de Movilidad</div><div class="kpi-value" style="color:var(--c1)" id="k-movilidad">—</div><div class="kpi-sub">personas que viajan</div></div>
-    <div class="kpi-card" style="--kc:var(--c2)"><div class="kpi-label">Viajes por Persona</div><div class="kpi-value" style="color:var(--c2)" id="k-viajes">—</div><div class="kpi-sub">en el día de registro</div></div>
-    <div class="kpi-card" style="--kc:var(--c3)"><div class="kpi-label">Distancia Media</div><div class="kpi-value" style="color:var(--c3)" id="k-dist">—</div><div class="kpi-sub">kilómetros por viaje</div></div>
-    <div class="kpi-card" style="--kc:var(--c4)"><div class="kpi-label">Tiempo Medio Viaje</div><div class="kpi-value" style="color:var(--c4)" id="k-tiempo">—</div><div class="kpi-sub">minutos por viaje</div></div>
-    <div class="kpi-card" style="--kc:var(--c5)"><div class="kpi-label">Velocidad Media</div><div class="kpi-value" style="color:var(--c5)" id="k-vel">—</div><div class="kpi-sub">km/h promedio</div></div>
-    <div class="kpi-card" style="--kc:var(--c1)"><div class="kpi-label">Total Personas</div><div class="kpi-value" id="k-pers">—</div><div class="kpi-sub">encuestadas</div></div>
+    <div class="kpi-card" style="--kc:var(--blue)"><div class="kpi-label">Tasa de Movilidad</div><div class="kpi-value" id="k-movilidad">—</div><div class="kpi-sub">personas que realizaron viajes</div></div>
+    <div class="kpi-card" style="--kc:var(--orange)"><div class="kpi-label">Viajes por Persona</div><div class="kpi-value" id="k-viajes">—</div><div class="kpi-sub">en el día de registro</div></div>
+    <div class="kpi-card" style="--kc:var(--green)"><div class="kpi-label">Distancia Media</div><div class="kpi-value" id="k-dist">—</div><div class="kpi-sub">kilómetros por viaje</div></div>
+    <div class="kpi-card" style="--kc:var(--c4)"><div class="kpi-label">Tiempo Medio Viaje</div><div class="kpi-value" id="k-tiempo">—</div><div class="kpi-sub">minutos por viaje</div></div>
+    <div class="kpi-card" style="--kc:var(--gold)"><div class="kpi-label">Velocidad Media</div><div class="kpi-value" id="k-vel">—</div><div class="kpi-sub">km/h promedio</div></div>
+    <div class="kpi-card" style="--kc:var(--navy)"><div class="kpi-label">Total Encuestados</div><div class="kpi-value" id="k-pers">—</div><div class="kpi-sub">personas en muestra</div></div>
   </div>
   <div class="panel-grid g2">
     <div class="panel">
-      <div class="panel-hdr"><span class="panel-title">Partición Modal Global</span><span class="panel-sub">% de viajes por modo</span></div>
+      <div class="panel-hdr"><span class="panel-title">Partición Modal Global</span><span class="panel-sub">distribución porcentual por modo</span></div>
       <div class="modal-bars" id="modal-global-bars"></div>
     </div>
     <div class="panel">
-      <div class="panel-hdr"><span class="panel-title">Distribución por Modo</span><span class="panel-sub">todos los viajes</span></div>
+      <div class="panel-hdr"><span class="panel-title">Distribución por Modo de Transporte</span><span class="panel-sub">todos los viajes registrados</span></div>
       <div class="panel-body"><div class="chart-wrap"><canvas id="chart-modal-donut"></canvas></div></div>
     </div>
   </div>
@@ -161,19 +278,24 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--border);font-
 
 <!-- ══ DISTANCIA ══ -->
 <div id="sec-distancia" class="tab-section">
+  <div class="section-intro">
+    <span class="si-icon">📏</span>
+    <div><div class="si-title">Distribución de Viajes por Distancia</div>
+    <div class="si-sub">Histograma en bins de 1 km (0 a 10 km) y categoría 10 km+</div></div>
+  </div>
   <div class="panel-grid">
     <div class="panel">
-      <div class="panel-hdr"><span class="panel-title">Distribución de Viajes por Distancia</span><span class="panel-sub">bins de 1 km · 0 a 10 km y 10km+</span></div>
+      <div class="panel-hdr"><span class="panel-title">Frecuencia por Tramo de Distancia</span><span class="panel-sub">% de viajes en cada rango · azul = corto · naranja = largo</span></div>
       <div class="panel-body"><div class="chart-wrap tall"><canvas id="chart-dist"></canvas></div></div>
     </div>
   </div>
-  <div class="panel-grid g2" style="margin-top:20px">
+  <div class="panel-grid g2" style="margin-top:16px">
     <div class="panel">
-      <div class="panel-hdr"><span class="panel-title">Distribución Acumulada</span><span class="panel-sub">% de viajes bajo cada umbral</span></div>
+      <div class="panel-hdr"><span class="panel-title">Distribución Acumulada</span><span class="panel-sub">% de viajes igual o menor a cada umbral</span></div>
       <div class="panel-body"><div class="chart-wrap"><canvas id="chart-dist-acum"></canvas></div></div>
     </div>
     <div class="panel">
-      <div class="panel-hdr"><span class="panel-title">Estadísticas de Distancia</span></div>
+      <div class="panel-hdr"><span class="panel-title">Estadísticas Descriptivas</span></div>
       <div class="panel-body" id="dist-stats" style="display:flex;flex-direction:column;gap:10px"></div>
     </div>
   </div>
@@ -181,17 +303,22 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--border);font-
 
 <!-- ══ GRUPOS ══ -->
 <div id="sec-grupos" class="tab-section">
-  <div class="grupo-grid" id="grupo-cards" style="margin-bottom:24px"></div>
+  <div class="section-intro">
+    <span class="si-icon">👥</span>
+    <div><div class="si-title">Movilidad por Grupos de Población</div>
+    <div class="si-sub">Adultos mayores · Edad productiva · Educación técnica/superior · Educación básica/media</div></div>
+  </div>
+  <div class="grupo-grid" id="grupo-cards" style="margin-bottom:20px"></div>
   <div class="panel-grid g2">
     <div class="panel">
       <div class="panel-hdr"><span class="panel-title">Partición Modal por Grupo</span></div>
       <div class="panel-body">
         <div class="sel-row" id="grupo-sel-btns"></div>
-        <div class="modal-bars" id="grupo-modal-bars"></div>
+        <div class="modal-bars" id="grupo-modal-bars" style="padding:0;margin-top:8px"></div>
       </div>
     </div>
     <div class="panel">
-      <div class="panel-hdr"><span class="panel-title">Comparativo Distancia Mediana</span><span class="panel-sub">km por viaje por grupo</span></div>
+      <div class="panel-hdr"><span class="panel-title">Distancia Mediana y Media por Grupo</span><span class="panel-sub">kilómetros por viaje</span></div>
       <div class="panel-body"><div class="chart-wrap"><canvas id="chart-grupos-dist"></canvas></div></div>
     </div>
   </div>
@@ -199,8 +326,13 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--border);font-
 
 <!-- ══ COMUNAS ══ -->
 <div id="sec-comunas" class="tab-section">
-  <div class="panel-hdr" style="margin-bottom:16px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px 18px">
-    <span class="panel-title">Seleccionar comuna</span>
+  <div class="section-intro">
+    <span class="si-icon">🏙️</span>
+    <div><div class="si-title">Análisis de Movilidad por Comuna</div>
+    <div class="si-sub">Partición modal y distribución de distancias · selecciona una comuna para detalle</div></div>
+  </div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)">
+    <span style="font-size:12px;font-weight:600;color:var(--navy)">Seleccionar Comuna:</span>
     <select class="sel" id="comuna-sel" onchange="updateComuna(this.value)">
       <option value="">Todas las comunas</option>
     </select>
@@ -211,55 +343,59 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--border);font-
       <div class="modal-bars" id="modal-comuna-bars"></div>
     </div>
     <div class="panel">
-      <div class="panel-hdr"><span class="panel-title">Distribución Distancia</span><span class="panel-sub" id="dist-comuna-sub">por comuna</span></div>
+      <div class="panel-hdr"><span class="panel-title">Distribución por Distancia</span><span class="panel-sub" id="dist-comuna-sub">por comuna</span></div>
       <div class="panel-body"><div class="chart-wrap"><canvas id="chart-comuna-dist"></canvas></div></div>
     </div>
   </div>
-  <div class="panel-grid g3" style="margin-top:20px" id="comunas-kpi-grid"></div>
+  <div class="panel-grid g3" style="margin-top:16px" id="comunas-kpi-grid"></div>
 </div>
 
 <!-- ══ DESEOS ══ -->
 <div id="sec-deseos" class="tab-section">
+  <div class="section-intro">
+    <span class="si-icon">🗺️</span>
+    <div><div class="si-title">Líneas de Deseo entre Comunas</div>
+    <div class="si-sub">El grosor de cada línea es proporcional al número de viajes entre el par origen-destino</div></div>
+  </div>
   <div class="panel">
     <div class="panel-hdr">
-      <span class="panel-title">Líneas de Deseo entre Comunas</span>
-      <span class="panel-sub">grosor proporcional al número de viajes</span>
+      <span class="panel-title">Mapa de Flujos Intercomunales</span>
+      <span class="panel-sub">Gran Concepción 2015 · haga clic en una línea para ver detalle</span>
     </div>
     <div id="desire-map"></div>
-    <div class="panel-body" id="od-top-list" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-top:4px"></div>
+    <div class="panel-body" id="od-top-list" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px;margin-top:4px"></div>
   </div>
 </div>
 
-<!-- ══ INDICADORES PROPUESTOS ══ -->
+<!-- ══ INDICADORES ══ -->
 <div id="sec-indicadores" class="tab-section">
-  <div style="background:rgba(110,198,255,.07);border:1px solid rgba(110,198,255,.2);border-radius:var(--r);padding:18px 20px;margin-bottom:24px;display:flex;gap:12px">
-    <span style="font-size:22px;flex-shrink:0">💡</span>
-    <div>
-      <div style="font-size:13px;font-weight:700;color:var(--c2);margin-bottom:5px">5 Indicadores Adicionales de Movilidad</div>
-      <div style="font-size:12px;color:var(--text2);line-height:1.6">Propuesta basada en los datos disponibles en la BDEOD Gran Concepción. Cada indicador responde a una dimensión diferente de la movilidad urbana sostenible.</div>
-    </div>
+  <div class="section-intro">
+    <span class="si-icon">💡</span>
+    <div><div class="si-title">Indicadores Propuestos de Movilidad Urbana</div>
+    <div class="si-sub">5 indicadores complementarios calculados a partir de la BDEOD Gran Concepción 2015</div></div>
   </div>
   <div class="prop-grid" id="prop-cards"></div>
 </div>
 
-<footer>
-  <span>Dashboard Movilidad · Gran Concepción · BDEOD 2017</span>
-  <span>Fuente: Encuesta Origen-Destino · 26.328 personas · 9 comunas</span>
-</footer>
+</div><!-- /page -->
+
+<!-- FOOTER -->
+<div class="site-footer">
+  <div class="site-footer-inner">
+    <span>SECTRA — Secretaría de Planificación de Transporte · Ministerio de Transportes y Telecomunicaciones</span>
+    <span>BDEOD Gran Concepción 2015 · 26.328 personas encuestadas · 9 comunas</span>
+  </div>
 </div>
 
 <script>
 const DATA = {"dist_bins": {"labels": ["0-1", "1-2", "2-3", "3-4", "4-5", "5-6", "6-7", "7-8", "8-9", "9-10", "10+"], "values": [12104, 7179, 4244, 3133, 2584, 1956, 1948, 1492, 1283, 1211, 10436]}, "grupos": {"adultos_mayores": {"label": "Adultos Mayores (65+)", "n": 5186, "dist_median": 2.0, "dist_mean": 6.3, "tiempo_median": 20.0, "modal": {"A pie": 36.2, "Auto/Moto": 20.2, "Bicicleta": 1.4, "BioTren/Otro": 1.7, "Bus/Colectivo": 40.4}, "cam_min": 0.7}, "edad_productiva": {"label": "Edad Productiva (24-65)", "n": 28351, "dist_median": 3.8, "dist_mean": 8.4, "tiempo_median": 25.0, "modal": {"A pie": 22.5, "Auto/Moto": 32.6, "Bicicleta": 2.2, "BioTren/Otro": 3.1, "Bus/Colectivo": 39.6}}, "educacion_superior": {"label": "Educación Superior/Técnica", "n": 15576, "dist_median": 5.0, "dist_mean": 9.8, "tiempo_median": 30.0, "modal": {"A pie": 15.5, "Auto/Moto": 39.0, "Bicicleta": 1.6, "BioTren/Otro": 4.0, "Bus/Colectivo": 39.9}}, "educacion_basica": {"label": "Educación Básica/Media (6-18)", "n": 8056, "dist_median": 1.8, "dist_mean": 4.5, "tiempo_median": 20.0, "modal": {"A pie": 27.1, "Auto/Moto": 38.3, "Bicicleta": 1.0, "BioTren/Otro": 1.2, "Bus/Colectivo": 32.3}}}, "comunas": {"Concepción": {"n": 13965, "modal": {"A pie": 19.5, "Auto/Moto": 28.7, "Bicicleta": 1.8, "BioTren/Otro": 2.4, "Bus/Colectivo": 47.6}, "dist_median": 3.9, "dist_mean": 7.3, "tiempo_median": 30.0, "dist_bins": [2608, 1801, 1439, 1228, 1020, 698, 628, 478, 401, 436, 3226]}, "Talcahuano": {"n": 7935, "modal": {"A pie": 25.2, "Auto/Moto": 35.0, "Bicicleta": 1.5, "BioTren/Otro": 3.5, "Bus/Colectivo": 34.8}, "dist_median": 3.2, "dist_mean": 6.4, "tiempo_median": 20.0, "dist_bins": [2132, 1016, 714, 560, 419, 386, 332, 285, 280, 192, 1617]}, "San Pedro de la Paz": {"n": 5493, "modal": {"A pie": 19.5, "Auto/Moto": 44.4, "Bicicleta": 1.7, "BioTren/Otro": 3.5, "Bus/Colectivo": 30.8}, "dist_median": 4.4, "dist_mean": 7.9, "tiempo_median": 30.0, "dist_bins": [1267, 698, 321, 371, 266, 262, 293, 263, 221, 255, 1276]}, "Coronel": {"n": 5363, "modal": {"A pie": 28.8, "Auto/Moto": 28.5, "Bicicleta": 3.1, "BioTren/Otro": 4.1, "Bus/Colectivo": 35.4}, "dist_median": 2.3, "dist_mean": 6.9, "tiempo_median": 20.0, "dist_bins": [1580, 920, 604, 361, 314, 190, 241, 100, 71, 45, 937]}, "Hualpen": {"n": 4101, "modal": {"A pie": 29.3, "Auto/Moto": 34.8, "Bicicleta": 1.7, "BioTren/Otro": 2.0, "Bus/Colectivo": 32.2}, "dist_median": 2.7, "dist_mean": 5.1, "tiempo_median": 20.0, "dist_bins": [1309, 539, 274, 221, 227, 274, 303, 244, 168, 120, 421]}, "Chiguayante": {"n": 3511, "modal": {"A pie": 25.4, "Auto/Moto": 31.5, "Bicicleta": 3.7, "BioTren/Otro": 2.6, "Bus/Colectivo": 36.7}, "dist_median": 3.0, "dist_mean": 7.5, "tiempo_median": 20.0, "dist_bins": [924, 536, 293, 206, 177, 75, 30, 11, 38, 43, 1178]}, "Lota": {"n": 2220, "modal": {"A pie": 33.5, "Auto/Moto": 17.4, "Bicicleta": 0.4, "BioTren/Otro": 1.3, "Bus/Colectivo": 47.4}, "dist_median": 1.3, "dist_mean": 6.1, "tiempo_median": 20.0, "dist_bins": [853, 629, 194, 37, 10, 14, 23, 36, 36, 34, 354]}, "Penco": {"n": 1918, "modal": {"A pie": 32.3, "Auto/Moto": 24.8, "Bicicleta": 1.1, "BioTren/Otro": 2.3, "Bus/Colectivo": 39.5}, "dist_median": 1.9, "dist_mean": 5.6, "tiempo_median": 20.0, "dist_bins": [631, 364, 127, 55, 88, 48, 62, 28, 31, 29, 455]}, "Tomé": {"n": 1892, "modal": {"A pie": 29.3, "Auto/Moto": 23.0, "Bicicleta": 1.3, "BioTren/Otro": 3.0, "Bus/Colectivo": 43.4}, "dist_median": 1.7, "dist_mean": 6.7, "tiempo_median": 20.0, "dist_bins": [523, 545, 240, 77, 45, 5, 27, 37, 19, 39, 335]}}, "od_matrix": [{"comuna_origen": "San Pedro de la Paz", "comuna_destino": "Concepción", "viajes": 1477}, {"comuna_origen": "Concepción", "comuna_destino": "San Pedro de la Paz", "viajes": 1428}, {"comuna_origen": "Concepción", "comuna_destino": "Talcahuano", "viajes": 1234}, {"comuna_origen": "Talcahuano", "comuna_destino": "Concepción", "viajes": 1202}, {"comuna_origen": "Hualpen", "comuna_destino": "Concepción", "viajes": 1047}, {"comuna_origen": "Concepción", "comuna_destino": "Hualpen", "viajes": 1033}, {"comuna_origen": "Concepción", "comuna_destino": "Chiguayante", "viajes": 858}, {"comuna_origen": "Chiguayante", "comuna_destino": "Concepción", "viajes": 847}, {"comuna_origen": "Hualpen", "comuna_destino": "Talcahuano", "viajes": 665}, {"comuna_origen": "Talcahuano", "comuna_destino": "Hualpen", "viajes": 656}, {"comuna_origen": "Coronel", "comuna_destino": "Concepción", "viajes": 366}, {"comuna_origen": "Concepción", "comuna_destino": "Coronel", "viajes": 357}, {"comuna_origen": "Penco", "comuna_destino": "Concepción", "viajes": 331}, {"comuna_origen": "Concepción", "comuna_destino": "Penco", "viajes": 322}, {"comuna_origen": "Talcahuano", "comuna_destino": "San Pedro de la Paz", "viajes": 280}, {"comuna_origen": "San Pedro de la Paz", "comuna_destino": "Talcahuano", "viajes": 272}, {"comuna_origen": "Lota", "comuna_destino": "Coronel", "viajes": 269}, {"comuna_origen": "Coronel", "comuna_destino": "Lota", "viajes": 257}, {"comuna_origen": "San Pedro de la Paz", "comuna_destino": "Coronel", "viajes": 224}, {"comuna_origen": "Coronel", "comuna_destino": "San Pedro de la Paz", "viajes": 223}, {"comuna_origen": "Tomé", "comuna_destino": "Concepción", "viajes": 184}, {"comuna_origen": "Concepción", "comuna_destino": "Tomé", "viajes": 183}, {"comuna_origen": "Talcahuano", "comuna_destino": "Chiguayante", "viajes": 156}, {"comuna_origen": "Chiguayante", "comuna_destino": "Talcahuano", "viajes": 148}, {"comuna_origen": "Hualpen", "comuna_destino": "San Pedro de la Paz", "viajes": 142}, {"comuna_origen": "San Pedro de la Paz", "comuna_destino": "Hualpen", "viajes": 130}, {"comuna_origen": "Lota", "comuna_destino": "Concepción", "viajes": 102}, {"comuna_origen": "Concepción", "comuna_destino": "Lota", "viajes": 102}, {"comuna_origen": "Talcahuano", "comuna_destino": "Coronel", "viajes": 95}, {"comuna_origen": "Talcahuano", "comuna_destino": "Penco", "viajes": 94}], "comunas_coords": {"Concepción": [-36.827, -73.0503], "Talcahuano": [-36.7246, -73.1167], "San Pedro de la Paz": [-36.8636, -73.1217], "Coronel": [-37.0278, -73.1553], "Hualpen": [-36.7985, -73.0908], "Chiguayante": [-36.9239, -73.0205], "Lota": [-37.0892, -73.1566], "Penco": [-36.7403, -73.0052], "Tomé": [-36.6196, -72.9611]}, "global": {"total_personas": 26328, "total_viajeros": 18997, "tasa_movilidad": 72.2, "total_viajes": 47580, "dist_media": 7.44, "tiempo_medio": 32.0, "vel_media": 14.0, "viajes_por_persona": 2.5, "modal_global": {"Bus/Colectivo": 39.1, "Auto/Moto": 31.7, "A pie": 24.4, "BioTren/Otro": 2.9, "Bicicleta": 1.9}}};
 
-// ══════════════════════════════
-// UTILS
-// ══════════════════════════════
 const MODO_COLORS = {
-  'Bus/Colectivo': '#6ec6ff',
-  'Auto/Moto':     '#ffd166',
-  'A pie':         '#5ee7b0',
-  'BioTren/Otro':  '#b794f4',
-  'Bicicleta':     '#ff6b8a'
+  'Bus/Colectivo': '#1464A5',
+  'Auto/Moto':     '#E8521A',
+  'A pie':         '#2E7D4F',
+  'BioTren/Otro':  '#8B3A8B',
+  'Bicicleta':     '#B07D0A'
 };
 const MODO_ORDER = ['Bus/Colectivo','Auto/Moto','A pie','BioTren/Otro','Bicicleta'];
 
@@ -274,43 +410,38 @@ function showTab(t){
   if(t==='deseos'&&!mapInit)initMap();
 }
 
-function makeBars(containerId, modalObj, highlight=null){
-  const el=document.getElementById(containerId);
-  if(!el)return;
-  const sorted=MODO_ORDER.filter(m=>modalObj[m]!==undefined);
-  el.innerHTML=sorted.map(m=>{
+function makeBars(id,modalObj){
+  const el=document.getElementById(id);if(!el)return;
+  el.innerHTML=MODO_ORDER.filter(m=>modalObj[m]!==undefined).map(m=>{
     const pct=modalObj[m]||0;
     const col=MODO_COLORS[m];
-    const isHL=highlight===m;
     return`<div class="modal-row">
       <div class="modal-label">${m}</div>
       <div class="modal-track">
-        <div class="modal-fill" style="width:${pct}%;background:${col}${isHL?'':'99'}">
-          <span class="modal-pct" style="color:${col===MODO_COLORS['A pie']?'#000':'#000'};color:#000;font-weight:600">${pct}%</span>
+        <div class="modal-fill" style="width:${pct}%;background:${col}">
+          <span class="modal-pct">${pct}%</span>
         </div>
       </div>
     </div>`;
   }).join('');
 }
 
-const CHART_OPTS = {
+const CO={
   responsive:true,maintainAspectRatio:false,
   plugins:{legend:{display:false},tooltip:{
-    backgroundColor:'rgba(8,9,13,.95)',borderColor:'rgba(255,255,255,.08)',borderWidth:1,
-    titleColor:'#8a87a0',bodyColor:'#eeeaf5',
-    titleFont:{size:10},bodyFont:{family:"'DM Mono',monospace",size:11}
+    backgroundColor:'rgba(26,43,60,.95)',borderColor:'rgba(200,212,227,.4)',borderWidth:1,
+    titleColor:'#7A8FA3',bodyColor:'#1A2B3C',
+    titleFont:{size:10},bodyFont:{family:"'Roboto Mono',monospace",size:11}
   }},
   scales:{
-    x:{ticks:{color:'#4f4d60',font:{size:10}},grid:{color:'rgba(255,255,255,.04)'},border:{color:'rgba(255,255,255,.06)'}},
-    y:{ticks:{color:'#4f4d60',font:{size:10}},grid:{color:'rgba(255,255,255,.04)'},border:{color:'rgba(255,255,255,.06)'}}
+    x:{ticks:{color:'#7A8FA3',font:{size:10}},grid:{color:'rgba(0,40,85,.06)'},border:{color:'rgba(0,40,85,.12)'}},
+    y:{ticks:{color:'#7A8FA3',font:{size:10}},grid:{color:'rgba(0,40,85,.06)'},border:{color:'rgba(0,40,85,.12)'}}
   }
 };
 let charts={};
 function mkChart(id,cfg){if(charts[id])charts[id].destroy();charts[id]=new Chart(document.getElementById(id),cfg);}
 
-// ══════════════════════════════
 // RESUMEN
-// ══════════════════════════════
 function initResumen(){
   const g=DATA.global;
   document.getElementById('k-movilidad').textContent=g.tasa_movilidad+'%';
@@ -323,17 +454,15 @@ function initResumen(){
   const modos=MODO_ORDER.filter(m=>g.modal_global[m]);
   mkChart('chart-modal-donut',{
     type:'doughnut',
-    data:{labels:modos,datasets:[{data:modos.map(m=>g.modal_global[m]),backgroundColor:modos.map(m=>MODO_COLORS[m]),borderWidth:2,borderColor:'#0f1117'}]},
-    options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
-      plugins:{legend:{display:true,position:'right',labels:{color:'#8a87a0',font:{size:11},padding:12,boxWidth:12}},
-        tooltip:{backgroundColor:'rgba(8,9,13,.95)',borderColor:'rgba(255,255,255,.08)',borderWidth:1,
-          titleColor:'#8a87a0',bodyColor:'#eeeaf5',callbacks:{label:c=>` ${c.label}: ${c.parsed}%`}}}}
+    data:{labels:modos,datasets:[{data:modos.map(m=>g.modal_global[m]),backgroundColor:modos.map(m=>MODO_COLORS[m]),borderWidth:2,borderColor:'#fff'}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
+      plugins:{legend:{display:true,position:'right',labels:{color:'#4A5E72',font:{size:11,family:"'Roboto',sans-serif"},padding:12,boxWidth:12}},
+        tooltip:{backgroundColor:'rgba(26,43,60,.95)',borderColor:'rgba(200,212,227,.4)',borderWidth:1,
+          titleColor:'#7A8FA3',bodyColor:'#1A2B3C',callbacks:{label:c=>` ${c.label}: ${c.parsed}%`}}}}
   });
 }
 
-// ══════════════════════════════
 // DISTANCIA
-// ══════════════════════════════
 function initDistancia(){
   const d=DATA.dist_bins;
   const total=d.values.reduce((a,b)=>a+b,0);
@@ -342,59 +471,50 @@ function initDistancia(){
     type:'bar',
     data:{labels:d.labels,datasets:[{
       data:pcts,
-      backgroundColor:d.labels.map((_,i)=>i<10?'rgba(110,198,255,0.7)':'rgba(255,107,138,0.7)'),
-      borderRadius:4,borderWidth:0
+      backgroundColor:d.labels.map((_,i)=>i<10?'rgba(20,100,165,0.75)':'rgba(232,82,26,0.75)'),
+      borderRadius:3,borderWidth:0
     }]},
-    options:{...CHART_OPTS,plugins:{...CHART_OPTS.plugins,tooltip:{...CHART_OPTS.plugins.tooltip,
+    options:{...CO,plugins:{...CO.plugins,tooltip:{...CO.plugins.tooltip,
       callbacks:{label:c=>[` ${c.parsed.y}% de viajes`,` n = ${d.values[c.dataIndex].toLocaleString('es-CL')}`]}}},
-      scales:{...CHART_OPTS.scales,
-        x:{...CHART_OPTS.scales.x,title:{display:true,text:'Distancia (km)',color:'#4f4d60',font:{size:11}}},
-        y:{...CHART_OPTS.scales.y,title:{display:true,text:'% de viajes',color:'#4f4d60',font:{size:11}},
-          ticks:{...CHART_OPTS.scales.y.ticks,callback:v=>v+'%'}}
-      }}
+      scales:{...CO.scales,
+        x:{...CO.scales.x,title:{display:true,text:'Distancia (km)',color:'#7A8FA3',font:{size:11}}},
+        y:{...CO.scales.y,title:{display:true,text:'% de viajes',color:'#7A8FA3',font:{size:11}},
+          ticks:{...CO.scales.y.ticks,callback:v=>v+'%'}}}}
   });
-  // Acumulada
   let cum=0;
   const cumPct=d.values.map(v=>{cum+=v;return parseFloat((cum/total*100).toFixed(1));});
   mkChart('chart-dist-acum',{
     type:'line',
     data:{labels:d.labels,datasets:[{
-      data:cumPct,borderColor:'#5ee7b0',backgroundColor:'rgba(94,231,176,.08)',
-      pointRadius:4,pointBackgroundColor:'#5ee7b0',tension:.4,fill:true
+      data:cumPct,borderColor:'#1464A5',backgroundColor:'rgba(20,100,165,.08)',
+      pointRadius:4,pointBackgroundColor:'#1464A5',tension:.4,fill:true
     }]},
-    options:{...CHART_OPTS,plugins:{...CHART_OPTS.plugins,tooltip:{...CHART_OPTS.plugins.tooltip,
-      callbacks:{label:c=>` ${c.parsed.y}% acumulado`}}},
-      scales:{...CHART_OPTS.scales,
-        y:{...CHART_OPTS.scales.y,min:0,max:100,ticks:{...CHART_OPTS.scales.y.ticks,callback:v=>v+'%'}}}}
+    options:{...CO,plugins:{...CO.plugins,tooltip:{...CO.plugins.tooltip,callbacks:{label:c=>` ${c.parsed.y}% acumulado`}}},
+      scales:{...CO.scales,y:{...CO.scales.y,min:0,max:100,ticks:{...CO.scales.y.ticks,callback:v=>v+'%'}}}}
   });
-  // Stats
   const stats=[
-    ['Mediana','3.1 km','50% de los viajes'],
-    ['Viajes < 2km',((d.values[0]+d.values[1])/total*100).toFixed(1)+'%','distancias cortas'],
-    ['Viajes < 5km',(d.values.slice(0,5).reduce((a,b)=>a+b,0)/total*100).toFixed(1)+'%','accesibles a pie/bici'],
-    ['Viajes > 10km',(d.values[10]/total*100).toFixed(1)+'%','larga distancia'],
+    ['Mediana de distancia','3.1 km','50% de los viajes son más cortos'],
+    ['Viajes < 2 km',((d.values[0]+d.values[1])/total*100).toFixed(1)+'%','potencial para modo activo'],
+    ['Viajes < 5 km',(d.values.slice(0,5).reduce((a,b)=>a+b,0)/total*100).toFixed(1)+'%','accesibles a pie o bicicleta'],
+    ['Viajes > 10 km',(d.values[10]/total*100).toFixed(1)+'%','requieren transporte motorizado'],
   ];
   document.getElementById('dist-stats').innerHTML=stats.map(([l,v,s])=>`
-    <div style="background:var(--bg3);border-radius:var(--r-sm);padding:12px 14px;display:flex;justify-content:space-between;align-items:center">
-      <div><div style="font-size:12px;color:var(--text2)">${l}</div><div style="font-size:10px;color:var(--text3)">${s}</div></div>
-      <div style="font-family:var(--mono);font-size:18px;font-weight:500;color:var(--c2)">${v}</div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px 14px;display:flex;justify-content:space-between;align-items:center">
+      <div><div style="font-size:12px;font-weight:500;color:var(--text)">${l}</div><div style="font-size:10px;color:var(--text3);margin-top:2px">${s}</div></div>
+      <div style="font-family:var(--mono);font-size:18px;font-weight:600;color:var(--blue)">${v}</div>
     </div>`).join('');
 }
 
-// ══════════════════════════════
 // GRUPOS
-// ══════════════════════════════
 let activeGrupo='adultos_mayores';
 const grupoKeys=['adultos_mayores','edad_productiva','educacion_superior','educacion_basica'];
-const grupoColors={'adultos_mayores':'var(--c4)','edad_productiva':'var(--c2)','educacion_superior':'var(--c5)','educacion_basica':'var(--c3)'};
-const grupoColorHex={'adultos_mayores':'#ff6b8a','edad_productiva':'#6ec6ff','educacion_superior':'#b794f4','educacion_basica':'#ffd166'};
+const grupoColorHex={'adultos_mayores':'#E8521A','edad_productiva':'#1464A5','educacion_superior':'#8B3A8B','educacion_basica':'#2E7D4F'};
 
 function initGrupos(){
   const g=DATA.grupos;
-  // Cards
   document.getElementById('grupo-cards').innerHTML=grupoKeys.map(k=>{
     const d=g[k];
-    const extra=k==='adultos_mayores'?`<div class="grupo-stat"><span class="gs-label">Caminata promedio</span><span class="gs-val" style="color:var(--c1)">${d.cam_min} min</span></div>`:'';
+    const extra=k==='adultos_mayores'?`<div class="grupo-stat"><span class="gs-label">Caminata promedio</span><span class="gs-val" style="color:var(--green)">${d.cam_min} min</span></div>`:'';
     return`<div class="grupo-card" style="border-top:3px solid ${grupoColorHex[k]}">
       <div class="grupo-name" style="color:${grupoColorHex[k]}">${d.label}</div>
       <div class="grupo-stat"><span class="gs-label">Viajes registrados</span><span class="gs-val">${d.n.toLocaleString('es-CL')}</span></div>
@@ -404,22 +524,20 @@ function initGrupos(){
       ${extra}
     </div>`;
   }).join('');
-  // Botones selector
   document.getElementById('grupo-sel-btns').innerHTML=grupoKeys.map(k=>`
-    <button class="sel-btn${k===activeGrupo?' active':''}" onclick="selectGrupo('${k}')">${DATA.grupos[k].label.split(' ')[0]+' '+DATA.grupos[k].label.split(' ')[1]}</button>`).join('');
+    <button class="sel-btn${k===activeGrupo?' active':''}" onclick="selectGrupo('${k}')">${DATA.grupos[k].label.split('(')[0].trim()}</button>`).join('');
   updateGrupoModal();
-  // Chart comparativo dist
   mkChart('chart-grupos-dist',{
     type:'bar',
     data:{
       labels:grupoKeys.map(k=>DATA.grupos[k].label),
       datasets:[
-        {label:'Mediana',data:grupoKeys.map(k=>DATA.grupos[k].dist_median),backgroundColor:grupoKeys.map(k=>grupoColorHex[k]+'aa'),borderRadius:4,borderWidth:0},
-        {label:'Media',data:grupoKeys.map(k=>DATA.grupos[k].dist_mean),backgroundColor:grupoKeys.map(k=>grupoColorHex[k]+'55'),borderRadius:4,borderWidth:0}
+        {label:'Mediana',data:grupoKeys.map(k=>DATA.grupos[k].dist_median),backgroundColor:grupoKeys.map(k=>grupoColorHex[k]+'cc'),borderRadius:3,borderWidth:0},
+        {label:'Media',data:grupoKeys.map(k=>DATA.grupos[k].dist_mean),backgroundColor:grupoKeys.map(k=>grupoColorHex[k]+'44'),borderRadius:3,borderWidth:0}
       ]
     },
-    options:{...CHART_OPTS,plugins:{...CHART_OPTS.plugins,legend:{display:true,labels:{color:'#8a87a0',font:{size:10}}}},
-      scales:{...CHART_OPTS.scales,y:{...CHART_OPTS.scales.y,ticks:{...CHART_OPTS.scales.y.ticks,callback:v=>v+' km'}}}}
+    options:{...CO,plugins:{...CO.plugins,legend:{display:true,labels:{color:'#4A5E72',font:{size:10}}}},
+      scales:{...CO.scales,y:{...CO.scales.y,ticks:{...CO.scales.y.ticks,callback:v=>v+' km'}}}}
   });
 }
 function selectGrupo(k){
@@ -427,26 +545,17 @@ function selectGrupo(k){
   document.querySelectorAll('#grupo-sel-btns .sel-btn').forEach((b,i)=>b.classList.toggle('active',grupoKeys[i]===k));
   updateGrupoModal();
 }
-function updateGrupoModal(){
-  makeBars('grupo-modal-bars',DATA.grupos[activeGrupo].modal);
-}
+function updateGrupoModal(){makeBars('grupo-modal-bars',DATA.grupos[activeGrupo].modal);}
 
-// ══════════════════════════════
 // COMUNAS
-// ══════════════════════════════
-let comunaDistChart=null;
 function initComunas(){
   const sel=document.getElementById('comuna-sel');
-  Object.keys(DATA.comunas).forEach(c=>{
-    const o=document.createElement('option');o.value=c;o.textContent=c;sel.appendChild(o);
-  });
-  // KPI cards por comunas
-  const kpiEl=document.getElementById('comunas-kpi-grid');
-  kpiEl.innerHTML=Object.entries(DATA.comunas).map(([c,d])=>`
-    <div class="kpi-card" style="border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;cursor:pointer" onclick="document.getElementById('comuna-sel').value='${c}';updateComuna('${c}')">
+  Object.keys(DATA.comunas).forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;sel.appendChild(o);});
+  document.getElementById('comunas-kpi-grid').innerHTML=Object.entries(DATA.comunas).map(([c,d])=>`
+    <div class="kpi-card" style="cursor:pointer" onclick="document.getElementById('comuna-sel').value='${c}';updateComuna('${c}')">
       <div class="kpi-label">${c}</div>
-      <div class="kpi-value" style="font-size:18px;color:var(--c2)">${d.n.toLocaleString('es-CL')}</div>
-      <div class="kpi-sub">viajes · dist.med ${d.dist_median}km · ${d.tiempo_median}min</div>
+      <div class="kpi-value" style="font-size:20px;color:var(--navy)">${d.n.toLocaleString('es-CL')}</div>
+      <div class="kpi-sub">viajes · dist.med ${d.dist_median} km · ${d.tiempo_median} min</div>
     </div>`).join('');
   updateComuna('');
 }
@@ -454,35 +563,31 @@ function updateComuna(c){
   const isAll=!c;
   document.getElementById('modal-comuna-sub').textContent=isAll?'todas las comunas':c;
   document.getElementById('dist-comuna-sub').textContent=isAll?'todas las comunas':c;
-  const modal=isAll?DATA.global.modal_global:DATA.comunas[c].modal;
-  makeBars('modal-comuna-bars',modal);
-  const distVals=isAll?DATA.dist_bins.values:DATA.comunas[c].dist_bins;
-  const total=distVals.reduce((a,b)=>a+b,0);
-  const pcts=distVals.map(v=>(v/total*100).toFixed(1));
+  makeBars('modal-comuna-bars',isAll?DATA.global.modal_global:DATA.comunas[c].modal);
+  const dv=isAll?DATA.dist_bins.values:DATA.comunas[c].dist_bins;
+  const tot=dv.reduce((a,b)=>a+b,0);
   if(charts['chart-comuna-dist'])charts['chart-comuna-dist'].destroy();
   charts['chart-comuna-dist']=new Chart(document.getElementById('chart-comuna-dist'),{
     type:'bar',
     data:{labels:DATA.dist_bins.labels,datasets:[{
-      data:pcts,backgroundColor:'rgba(183,148,244,0.65)',borderRadius:4,borderWidth:0
+      data:dv.map(v=>(v/tot*100).toFixed(1)),
+      backgroundColor:'rgba(139,58,139,0.65)',borderRadius:3,borderWidth:0
     }]},
-    options:{...CHART_OPTS,plugins:{...CHART_OPTS.plugins,tooltip:{...CHART_OPTS.plugins.tooltip,
-      callbacks:{label:c=>`${c.parsed.y}%`}}},
-      scales:{...CHART_OPTS.scales,y:{...CHART_OPTS.scales.y,ticks:{...CHART_OPTS.scales.y.ticks,callback:v=>v+'%'}}}}
+    options:{...CO,plugins:{...CO.plugins,tooltip:{...CO.plugins.tooltip,callbacks:{label:c=>`${c.parsed.y}%`}}},
+      scales:{...CO.scales,y:{...CO.scales.y,ticks:{...CO.scales.y.ticks,callback:v=>v+'%'}}}}
   });
 }
 
-// ══════════════════════════════
-// LÍNEAS DE DESEO
-// ══════════════════════════════
+// MAPA DESEOS
 let mapInit=false,desireMap=null;
 function initMap(){
   mapInit=true;
   desireMap=L.map('desire-map',{center:[-36.88,-73.05],zoom:10});
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
     attribution:'© OpenStreetMap © CARTO',subdomains:'abcd',maxZoom:19
   }).addTo(desireMap);
   const ps=document.createElement('style');
-  ps.textContent='.dp .leaflet-popup-content-wrapper{background:rgba(8,9,13,.97);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#eeeaf5}.dp .leaflet-popup-tip{background:rgba(8,9,13,.97)}.leaflet-popup-content{margin:10px 14px;font-size:12px}';
+  ps.textContent='.dp .leaflet-popup-content-wrapper{background:rgba(26,43,60,.97);border:1px solid rgba(200,212,227,.3);border-radius:6px;color:#eeeaf5;box-shadow:0 4px 16px rgba(0,0,0,.3)}.dp .leaflet-popup-tip{background:rgba(26,43,60,.97)}.leaflet-popup-content{margin:10px 14px;font-size:12px}';
   document.head.appendChild(ps);
   const coords=DATA.comunas_coords;
   const od=DATA.od_matrix;
@@ -490,68 +595,48 @@ function initMap(){
   od.forEach(r=>{
     const co=coords[r.comuna_origen],cd=coords[r.comuna_destino];
     if(!co||!cd)return;
-    const w=Math.max(1.5,r.viajes/maxV*18);
-    const opacity=0.3+r.viajes/maxV*0.55;
+    const w=Math.max(1.5,r.viajes/maxV*16);
     const line=L.polyline([[co[0],co[1]],[cd[0],cd[1]]],{
-      weight:w,color:'#5ee7b0',opacity,
+      weight:w,color:'#1464A5',opacity:0.35+r.viajes/maxV*0.5
     }).addTo(desireMap);
-    line.bindPopup(`<div><b style="color:#5ee7b0">${r.comuna_origen} → ${r.comuna_destino}</b><br>${r.viajes.toLocaleString('es-CL')} viajes</div>`,{className:'dp'});
+    line.bindPopup(`<div><b style="color:#6ec6ff">${r.comuna_origen} → ${r.comuna_destino}</b><br>${r.viajes.toLocaleString('es-CL')} viajes</div>`,{className:'dp'});
   });
   Object.entries(coords).forEach(([c,[lat,lon]])=>{
-    L.circleMarker([lat,lon],{radius:7,fillColor:'#ffd166',fillOpacity:.9,color:'#000',weight:1})
-      .bindPopup(`<b style="color:#ffd166">${c}</b>`,{className:'dp'})
-      .addTo(desireMap);
-    L.marker([lat,lon],{icon:L.divIcon({className:'',html:`<div style="font-family:Syne,sans-serif;font-size:10px;font-weight:700;color:#ffd166;white-space:nowrap;text-shadow:0 1px 3px #000">${c}</div>`,iconAnchor:[-10,-5]})}).addTo(desireMap);
+    L.circleMarker([lat,lon],{radius:8,fillColor:'#E8521A',fillOpacity:.9,color:'#fff',weight:2})
+      .bindPopup(`<b style="color:#f09070">${c}</b>`,{className:'dp'}).addTo(desireMap);
+    L.marker([lat,lon],{icon:L.divIcon({className:'',html:`<div style="font-family:Roboto,sans-serif;font-size:10px;font-weight:700;color:#002855;background:rgba(255,255,255,.85);padding:1px 5px;border-radius:2px;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,.2)">${c}</div>`,iconAnchor:[-6,-12]})}).addTo(desireMap);
   });
-  // Top OD list
   document.getElementById('od-top-list').innerHTML=od.slice(0,12).map((r,i)=>`
-    <div style="background:var(--bg3);border-radius:var(--r-sm);padding:10px 12px;display:flex;justify-content:space-between;align-items:center">
-      <div><span style="font-size:10px;color:var(--text3)">#${i+1} </span><span style="font-size:11px;color:var(--text2)">${r.comuna_origen} → ${r.comuna_destino}</span></div>
-      <div style="font-family:var(--mono);font-size:13px;color:var(--c1)">${r.viajes.toLocaleString('es-CL')}</div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;display:flex;justify-content:space-between;align-items:center">
+      <div><span style="font-size:10px;color:var(--text3);margin-right:4px">#${i+1}</span><span style="font-size:11px;color:var(--text2)">${r.comuna_origen} → ${r.comuna_destino}</span></div>
+      <div style="font-family:var(--mono);font-size:13px;font-weight:600;color:var(--blue)">${r.viajes.toLocaleString('es-CL')}</div>
     </div>`).join('');
 }
 
-// ══════════════════════════════
-// INDICADORES PROPUESTOS
-// ══════════════════════════════
+// INDICADORES
 function initIndicadores(){
   const g=DATA.global;
   const indicators=[
-    {
-      num:'IND 01', color:'#5ee7b0',
-      name:'Índice de Dependencia del Auto',
-      val: (DATA.global.modal_global['Auto/Moto']||0)+'%',
-      desc:'Porcentaje de viajes realizados en vehículo privado. Permite monitorear el avance hacia modos más sostenibles. La meta internacional recomendada es <30% en ciudades compactas.',
-      badge:'Sostenibilidad', bc:'rgba(94,231,176,.15)', btc:'#5ee7b0'
-    },
-    {
-      num:'IND 02', color:'#6ec6ff',
-      name:'Tiempo Perdido en Transporte',
-      val: g.tiempo_medio+' min',
-      desc:'Tiempo promedio por viaje. Combinado con los viajes diarios por persona ('+g.viajes_por_persona+'), el tiempo total diario en transporte es aproximadamente '+Math.round(g.tiempo_medio*g.viajes_por_persona)+' min/persona.',
-      badge:'Calidad de vida', bc:'rgba(110,198,255,.15)', btc:'#6ec6ff'
-    },
-    {
-      num:'IND 03', color:'#ffd166',
-      name:'Cuota Modal Activa',
-      val: ((DATA.global.modal_global['A pie']||0)+(DATA.global.modal_global['Bicicleta']||0)).toFixed(1)+'%',
-      desc:'Suma de viajes a pie y en bicicleta. Refleja el potencial de la ciudad para promover modos activos. El '+DATA.global.modal_global['A pie']+'% a pie y el '+DATA.global.modal_global['Bicicleta']+'% en bicicleta indican bajo uso ciclista.',
-      badge:'Movilidad activa', bc:'rgba(255,209,102,.15)', btc:'#ffd166'
-    },
-    {
-      num:'IND 04', color:'#b794f4',
-      name:'Cobertura del Transporte Público',
-      val: (DATA.global.modal_global['Bus/Colectivo']||0)+'%',
-      desc:'Participación del transporte público (bus y colectivo) en el total de viajes. Con un '+DATA.global.modal_global['Bus/Colectivo']+'%, la Gran Concepción muestra alta dependencia del TP, indicando una red relevante que merece inversión prioritaria.',
-      badge:'Transporte público', bc:'rgba(183,148,244,.15)', btc:'#b794f4'
-    },
-    {
-      num:'IND 05', color:'#ff6b8a',
-      name:'Brecha Modal Adultos Mayores',
-      val: ((DATA.grupos.adultos_mayores.modal['A pie']||0)).toFixed(1)+'% a pie',
-      desc:'Los adultos mayores (65+) caminan '+(DATA.grupos.adultos_mayores.modal['A pie']||0)+'% de sus viajes vs. '+(DATA.global.modal_global['A pie']||0)+'% global. Esta brecha identifica necesidades específicas de accesibilidad y diseño urbano inclusivo.',
-      badge:'Equidad', bc:'rgba(255,107,138,.15)', btc:'#ff6b8a'
-    }
+    {num:'IND 01',color:'#1464A5',name:'Índice de Dependencia del Automóvil',
+     val:(g.modal_global['Auto/Moto']||0)+'%',
+     desc:'Porcentaje de viajes en vehículo privado. Con un '+(g.modal_global['Auto/Moto']||0)+'%, la Gran Concepción muestra una dependencia moderada del auto. La meta internacional para ciudades compactas es inferior al 30%.',
+     badge:'Sostenibilidad',bc:'rgba(20,100,165,.1)',btc:'#1464A5'},
+    {num:'IND 02',color:'#E8521A',name:'Tiempo Diario Invertido en Transporte',
+     val:Math.round(g.tiempo_medio*g.viajes_por_persona)+' min',
+     desc:'Estimación del tiempo total diario que una persona promedio destina a desplazamientos ('+g.tiempo_medio+' min/viaje × '+g.viajes_por_persona+' viajes). Valores superiores a 60 min/día se asocian a pérdida de bienestar.',
+     badge:'Calidad de vida',bc:'rgba(232,82,26,.1)',btc:'#E8521A'},
+    {num:'IND 03',color:'#2E7D4F',name:'Cuota Modal de Transporte Activo',
+     val:((g.modal_global['A pie']||0)+(g.modal_global['Bicicleta']||0)).toFixed(1)+'%',
+     desc:'Suma de viajes a pie ('+(g.modal_global['A pie']||0)+'%) y en bicicleta ('+(g.modal_global['Bicicleta']||0)+'%). El bajo uso de la bicicleta ('+g.modal_global['Bicicleta']+'%) señala potencial de crecimiento si se mejora la infraestructura ciclista.',
+     badge:'Movilidad activa',bc:'rgba(46,125,79,.1)',btc:'#2E7D4F'},
+    {num:'IND 04',color:'#8B3A8B',name:'Participación del Transporte Público',
+     val:(g.modal_global['Bus/Colectivo']||0)+'%',
+     desc:'Con un '+(g.modal_global['Bus/Colectivo']||0)+'% de los viajes en bus o colectivo, el transporte público es el modo principal de la región. Esto justifica inversión prioritaria en calidad, frecuencia y cobertura.',
+     badge:'Transporte público',bc:'rgba(139,58,139,.1)',btc:'#8B3A8B'},
+    {num:'IND 05',color:'#B07D0A',name:'Brecha de Movilidad Adultos Mayores',
+     val:((DATA.grupos.adultos_mayores.modal['A pie']||0)).toFixed(1)+'% a pie',
+     desc:'Los adultos mayores (65+) realizan el '+(DATA.grupos.adultos_mayores.modal['A pie']||0)+'% de sus viajes a pie, frente al '+(g.modal_global['A pie']||0)+'% global. Esta brecha indica mayor vulnerabilidad ante déficit de infraestructura peatonal.',
+     badge:'Equidad e inclusión',bc:'rgba(176,125,10,.1)',btc:'#B07D0A'},
   ];
   document.getElementById('prop-cards').innerHTML=indicators.map(d=>`
     <div class="prop-card" style="--pc:${d.color}">
@@ -563,14 +648,7 @@ function initIndicadores(){
     </div>`).join('');
 }
 
-// ══════════════════════════════
-// INIT
-// ══════════════════════════════
-initResumen();
-initDistancia();
-initGrupos();
-initComunas();
-initIndicadores();
+initResumen();initDistancia();initGrupos();initComunas();initIndicadores();
 </script>
 </body>
 </html>
