@@ -721,7 +721,7 @@ function update(){
   document.getElementById('v-flota').textContent=v.flota+(v.flota<=5?' buses 🧪 piloto':' buses');
   document.getElementById('v-plazo').textContent=v.plazo+' meses';
   document.getElementById('v-tarifa').textContent='$'+v.tarifa.toLocaleString('es-CL');
-  document.getElementById('v-tarifa-uf').textContent=(v.tarifa/40000).toFixed(3)+' UF/bus/día';
+  document.getElementById('v-tarifa-uf').textContent=(v.tarifa*30/40000).toFixed(3)+' UF/bus/mes';
   document.getElementById('v-opex').textContent=fmtCLP(v.opex,true);
   document.getElementById('v-capexbus').textContent='$'+v.capexBus.toLocaleString('es-CL');
   document.getElementById('v-tdesc').textContent=(v.tdescPct/10).toFixed(1)+'% / mes';
@@ -1033,7 +1033,7 @@ function updateObjetivo() {
   const objTarifa = +objTarifaInput.value || v.tarifa;
   // Update UF display
   const ufDisp = document.getElementById('obj-tarifa-uf-display');
-  if (ufDisp) ufDisp.textContent = (objTarifa/40000).toFixed(4) + ' UF/bus/día · (1 UF = $40.000)';
+  if (ufDisp) ufDisp.textContent = (objTarifa*30/40000).toFixed(4) + ' UF/bus/mes · (1 UF = $40.000)';
   // Override tarifa in v for all objetivo calculations
   v.tarifa = objTarifa;
   v.dias = 30;
