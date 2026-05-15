@@ -3,26 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Evaluador Financiero — Proyecto Buses</title>
+<title>Evaluador Financiero — Fluxus Insight</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0a0a0f;--bg2:#111118;--bg3:#1a1a24;--bg4:#22222f;
-  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
-  --text:#f0ede8;--text2:#8a8799;--text3:#55536a;
-  --accent:#7fffb2;--accent-dim:rgba(127,255,178,0.08);--accent-dim2:rgba(127,255,178,0.15);
-  --warn:#ff8c5a;--warn-dim:rgba(255,140,90,0.1);
-  --blue:#6ec6ff;--blue-dim:rgba(110,198,255,0.1);
-  --gold:#ffd166;--gold-dim:rgba(255,209,102,0.1);
-  --red:#ff5e5e;--red-dim:rgba(255,94,94,0.1);
-  --purple:#c084fc;--purple-dim:rgba(192,132,252,0.1);
+  --bg:#f0f6f9;--bg2:#ffffff;--bg3:#e8f2f7;--bg4:#d4e7ef;
+  --border:rgba(0,150,180,0.15);--border2:rgba(0,150,180,0.25);
+  --text:#0d2230;--text2:#3a6070;--text3:#7aa0b0;
+  --accent:#007fa3;--accent-dim:rgba(0,127,163,0.08);--accent-dim2:rgba(0,127,163,0.15);
+  --warn:#d95f00;--warn-dim:rgba(217,95,0,0.09);
+  --blue:#0077cc;--blue-dim:rgba(0,119,204,0.09);
+  --gold:#b07800;--gold-dim:rgba(176,120,0,0.09);
+  --red:#c0222e;--red-dim:rgba(192,34,46,0.08);
+  --purple:#5c3fa3;--purple-dim:rgba(92,63,163,0.09);
   --radius:12px;--radius-sm:8px;
   --font:'Syne',sans-serif;--mono:'DM Mono',monospace;
 }
 html{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15px}
-body{min-height:100vh;background:radial-gradient(ellipse 80% 50% at 20% -10%,rgba(127,255,178,0.04) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 80% 110%,rgba(110,198,255,0.04) 0%,transparent 60%),var(--bg)}
+body{min-height:100vh;background:radial-gradient(ellipse 80% 50% at 20% -10%,rgba(0,127,163,0.06) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 80% 110%,rgba(0,119,204,0.04) 0%,transparent 60%),var(--bg)}
 .page{max-width:1280px;margin:0 auto;padding:0 24px 80px}
 
 /* HEADER */
@@ -65,8 +65,8 @@ h1 span{color:var(--accent)}
 .slider-name{font-size:13px;color:var(--text2);font-weight:500}
 .slider-val{font-family:var(--mono);font-size:15px;font-weight:500;color:var(--text);min-width:110px;text-align:right}
 input[type=range]{-webkit-appearance:none;width:100%;height:3px;border-radius:2px;background:var(--bg4);outline:none;cursor:pointer}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);border:2px solid var(--bg2);box-shadow:0 0 0 1px rgba(127,255,178,0.3);transition:transform 0.1s,box-shadow 0.1s}
-input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2);box-shadow:0 0 0 4px rgba(127,255,178,0.15)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.18);transition:transform 0.1s,box-shadow 0.1s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2);box-shadow:0 2px 8px rgba(0,127,163,0.25)}
 .slider-limits{display:flex;justify-content:space-between;margin-top:5px;font-size:10px;color:var(--text3);font-family:var(--mono)}
 
 /* METRICS */
@@ -246,7 +246,7 @@ footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--border);displ
 
 <header>
   <div class="header-left">
-    <div class="eyebrow">Evaluación financiera</div>
+    <div class="eyebrow">Fluxus Insight · Evaluación financiera</div>
     <h1>Proyecto <span>Buses</span><br>Análisis de Rentabilidad</h1>
     <p class="header-sub">Modifica las variables y evalúa la viabilidad del proyecto. Incluye simulación de Montecarlo para cuantificar el riesgo.</p>
   </div>
@@ -277,8 +277,8 @@ footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--border);displ
             <span class="slider-name">Flota de buses</span>
             <span class="slider-val" id="v-flota">3 buses (piloto)</span>
           </div>
-          <input type="range" id="sl-flota" min="3" max="500" step="1" value="3">
-          <div class="slider-limits"><span>3 (piloto)</span><span>500</span></div>
+          <input type="range" id="sl-flota" min="1" max="2000" step="1" value="3">
+          <div class="slider-limits"><span>1 (piloto)</span><span>2.000</span></div>
         </div>
 
         <div class="slider-item">
@@ -286,8 +286,8 @@ footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--border);displ
             <span class="slider-name">Plazo del contrato</span>
             <span class="slider-val" id="v-plazo">24 meses</span>
           </div>
-          <input type="range" id="sl-plazo" min="6" max="60" step="6" value="24">
-          <div class="slider-limits"><span>6m</span><span>60m</span></div>
+          <input type="range" id="sl-plazo" min="1" max="72" step="1" value="24">
+          <div class="slider-limits"><span>1m</span><span>72m</span></div>
         </div>
 
         <div class="slider-item">
@@ -297,15 +297,11 @@ footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--border);displ
           </div>
           <input type="range" id="sl-tarifa" min="1000" max="15000" step="500" value="4500">
           <div class="slider-limits"><span>$1.000</span><span>$15.000</span></div>
-        </div>
-
-        <div class="slider-item">
-          <div class="slider-top">
-            <span class="slider-name">Días activos por mes</span>
-            <span class="slider-val" id="v-dias">30 días</span>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:8px;padding:7px 10px;background:var(--bg3);border-radius:6px;border:1px solid var(--border)">
+            <span style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3)">UF equivalente:</span>
+            <span id="v-tarifa-uf" style="font-family:var(--mono);font-size:13px;font-weight:500;color:var(--accent)">0,11 UF/bus/día</span>
+            <span style="font-size:10px;color:var(--text3)">(1 UF = $40.000)</span>
           </div>
-          <input type="range" id="sl-dias" min="15" max="30" step="1" value="30">
-          <div class="slider-limits"><span>15</span><span>30</span></div>
         </div>
 
         <div class="section-sep">Costos</div>
@@ -459,16 +455,6 @@ footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--border);displ
         </div>
 
         <div class="mc-var-item">
-          <div class="mc-var-header"><span class="mc-var-name">Días activos / mes</span><span class="mc-var-type">Uniforme</span></div>
-          <div class="mc-range-row">
-            <input class="mc-range-input" id="mc-dias-min" type="number" value="22" min="15" max="30">
-            <span class="mc-range-sep">→</span>
-            <input class="mc-range-input" id="mc-dias-max" type="number" value="30" min="15" max="30">
-          </div>
-          <div class="mc-range-labels"><span>mínimo</span><span>máximo (días)</span></div>
-        </div>
-
-        <div class="mc-var-item">
           <div class="mc-var-header"><span class="mc-var-name">Costo por bus (CAPEX)</span><span class="mc-var-type">Normal</span></div>
           <div class="mc-range-row">
             <input class="mc-range-input" id="mc-capex-min" type="number" value="600000" step="50000">
@@ -568,6 +554,17 @@ footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--border);displ
         <div class="slider-limits"><span>$0</span><span>$500M</span></div>
       </div>
 
+      <!-- TARIFA FIJA -->
+      <div class="obj-section">
+        <div class="obj-label">Tarifa por bus / día (fija)</div>
+        <div style="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;margin-bottom:6px">
+          <input type="number" id="obj-tarifa-input" value="4500" min="500" max="50000" step="500"
+            style="background:var(--bg3);border:1px solid var(--border2);border-radius:7px;padding:9px 12px;color:var(--text);font-family:var(--mono);font-size:16px;font-weight:500;outline:none;width:100%">
+          <span style="font-size:12px;color:var(--text3);white-space:nowrap">$/bus/día</span>
+        </div>
+        <div id="obj-tarifa-uf-display" style="font-size:11px;color:var(--accent);font-family:var(--mono);padding:5px 8px;background:var(--accent-dim);border-radius:5px;text-align:center">0.113 UF/bus/día · (1 UF = $40.000)</div>
+      </div>
+
       <!-- MODO -->
       <div class="obj-section">
         <div class="obj-label">Modo del solver</div>
@@ -582,8 +579,8 @@ footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--border);displ
             <span class="slider-name" style="font-size:13px;color:var(--text2)">Flota de buses</span>
             <span class="slider-val" id="obj-flota-val">3 buses</span>
           </div>
-          <input type="range" id="sl-obj-flota" min="3" max="300" step="1" value="3">
-          <div class="slider-limits"><span>3 buses</span><span>300</span></div>
+          <input type="range" id="sl-obj-flota" min="1" max="2000" step="1" value="3">
+          <div class="slider-limits"><span>1 bus</span><span>2.000</span></div>
           <div class="obj-computed">
             <div class="obj-computed-label">Plazo mínimo requerido</div>
             <div class="obj-computed-val" id="obj-plazo-computed" style="color:var(--gold)">—</div>
@@ -597,8 +594,8 @@ footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--border);displ
             <span class="slider-name" style="font-size:13px;color:var(--text2)">Plazo del contrato</span>
             <span class="slider-val" id="obj-plazo-val">24 meses</span>
           </div>
-          <input type="range" id="sl-obj-plazo" min="6" max="60" step="6" value="24">
-          <div class="slider-limits"><span>6m</span><span>60m</span></div>
+          <input type="range" id="sl-obj-plazo" min="1" max="72" step="1" value="24">
+          <div class="slider-limits"><span>1m</span><span>72m</span></div>
           <div class="obj-computed">
             <div class="obj-computed-label">Flota mínima requerida</div>
             <div class="obj-computed-val" id="obj-flota-computed" style="color:var(--gold)">—</div>
@@ -648,7 +645,7 @@ footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--border);displ
 </div>
 
 <footer>
-  <span>Evaluador Financiero · Proyecto Buses · Flujo descontado + Montecarlo</span>
+  <span>Fluxus Insight · Evaluador Financiero · Proyecto Buses</span>
   <span>OPEX fijo + CAPEX variable por bus · Crédito sistema francés · 10.000 iteraciones</span>
 </footer>
 </div>
@@ -704,7 +701,7 @@ function getVals(){
     flota:+document.getElementById('sl-flota').value,
     plazo:+document.getElementById('sl-plazo').value,
     tarifa:+document.getElementById('sl-tarifa').value,
-    dias:+document.getElementById('sl-dias').value,
+    dias:30,
     opex:+document.getElementById('sl-opex').value,
     capexBus:+document.getElementById('sl-capexbus').value,
     tdescPct:+document.getElementById('sl-tdesc').value,
@@ -724,7 +721,7 @@ function update(){
   document.getElementById('v-flota').textContent=v.flota+(v.flota<=5?' buses 🧪 piloto':' buses');
   document.getElementById('v-plazo').textContent=v.plazo+' meses';
   document.getElementById('v-tarifa').textContent='$'+v.tarifa.toLocaleString('es-CL');
-  document.getElementById('v-dias').textContent=v.dias+' días';
+  document.getElementById('v-tarifa-uf').textContent=(v.tarifa/40000).toFixed(3)+' UF/bus/día';
   document.getElementById('v-opex').textContent=fmtCLP(v.opex,true);
   document.getElementById('v-capexbus').textContent='$'+v.capexBus.toLocaleString('es-CL');
   document.getElementById('v-tdesc').textContent=(v.tdescPct/10).toFixed(1)+'% / mes';
@@ -768,7 +765,7 @@ function update(){
   document.getElementById('mv-flujo').textContent=fmtCLP(flujoOpMes,true);
   document.getElementById('mc-flujo').className='metric-card '+(flujoOpMes>=0?'is-pos':'is-neg');
   document.getElementById('mv-ingreso').textContent=fmtCLP(ingresoMes,true);
-  document.getElementById('ms-ingreso').textContent=v.flota+'b × $'+v.tarifa.toLocaleString('es-CL')+' × '+v.dias+'d';
+  document.getElementById('ms-ingreso').textContent=v.flota+'b × $'+v.tarifa.toLocaleString('es-CL')+' × 30d';
   document.getElementById('mv-capex').textContent=fmtCLP(capex,true);
   document.getElementById('mv-cuota').textContent=useCred?fmtCLP(cuota,true):'—';
   document.getElementById('ms-cuota').textContent=useCred?'Total: '+fmtCLP(costoCred,true):'Sin financiamiento';
@@ -871,8 +868,6 @@ function runMontecarlo(){
     const tarifaMax=+document.getElementById('mc-tarifa-max').value;
     const opexMin=+document.getElementById('mc-opex-min').value;
     const opexMax=+document.getElementById('mc-opex-max').value;
-    const diasMin=+document.getElementById('mc-dias-min').value;
-    const diasMax=+document.getElementById('mc-dias-max').value;
     const capexMin=+document.getElementById('mc-capex-min').value;
     const capexMax=+document.getElementById('mc-capex-max').value;
 
@@ -886,9 +881,8 @@ function runMontecarlo(){
       const flota=Math.round(clamp(randUniform(flotaMin,flotaMax),flotaMin,flotaMax));
       const tarifa=clamp(randNormal(tMed,tStd),tarifaMin,tarifaMax);
       const opex=clamp(randNormal(oMed,oStd),opexMin,opexMax);
-      const dias=Math.round(clamp(randUniform(diasMin,diasMax),diasMin,diasMax));
       const capexBus=clamp(randNormal(cMed,cStd),capexMin,capexMax);
-      vans.push(calcVANsim(flota,tarifa,opex,dias,capexBus,v.plazo,tDesc,v.pcred,v.icredPct));
+      vans.push(calcVANsim(flota,tarifa,opex,30,capexBus,v.plazo,tDesc,v.pcred,v.icredPct));
     }
 
     vans.sort((a,b)=>a-b);
@@ -1002,7 +996,7 @@ function calcVANobj(flota, plazo, tarifa, v) {
   const tDesc = v.tdescPct / 1000;
   const tCredMes = Math.pow(1 + v.icredPct / 100, 1 / 12) - 1;
   const capex = v.capexBus * flota;
-  const ingresoMes = flota * tarifa * v.dias;
+  const ingresoMes = flota * tarifa * 30;
   const flujoOp = ingresoMes - v.opex;
   const cuota = cuotaFrances(capex, tCredMes, v.pcred);
   const useCred = v.pcred > 0;
@@ -1034,6 +1028,16 @@ function solveFlota(plazo, vanObj, v) {
 
 function updateObjetivo() {
   const v = getVals();
+  // Tarifa propia del Objetivo (editable)
+  const objTarifaInput = document.getElementById('obj-tarifa-input');
+  const objTarifa = +objTarifaInput.value || v.tarifa;
+  // Update UF display
+  const ufDisp = document.getElementById('obj-tarifa-uf-display');
+  if (ufDisp) ufDisp.textContent = (objTarifa/40000).toFixed(4) + ' UF/bus/día · (1 UF = $40.000)';
+  // Override tarifa in v for all objetivo calculations
+  v.tarifa = objTarifa;
+  v.dias = 30;
+
   const vanObj = +document.getElementById('sl-van-objetivo').value * 1e6;
   document.getElementById('obj-van-disp').textContent = '$' + document.getElementById('sl-van-objetivo').value + 'M';
 
@@ -1099,7 +1103,7 @@ function updateObjetivo() {
 function buildObjChart(vanObj, v, solFlota, solPlazo) {
   // Generar curva de frontera: para cada flota, el plazo mínimo requerido
   const flotaRange = [];
-  for (let f = 3; f <= 250; f += (f < 20 ? 1 : f < 50 ? 2 : f < 100 ? 5 : 10)) flotaRange.push(f);
+  for (let f = 1; f <= 2000; f += (f < 20 ? 1 : f < 100 ? 5 : f < 500 ? 25 : 100)) flotaRange.push(f);
   
   // Puntos de la frontera (flota, plazoMin)
   const frontierPoints = [];
@@ -1114,8 +1118,8 @@ function buildObjChart(vanObj, v, solFlota, solPlazo) {
 
   // Scatter grid para background
   const gridPoints = [];
-  const flotaGrid = [3, 5, 8, 10, 15, 20, 30, 40, 50, 75, 100, 150, 200];
-  const plazoGrid = [6, 12, 18, 24, 30, 36, 48, 60, 72];
+  const flotaGrid = [1, 3, 5, 10, 20, 50, 100, 200, 500, 1000, 1500, 2000];
+  const plazoGrid = [1, 6, 12, 18, 24, 30, 36, 48, 60, 72];
   flotaGrid.forEach(f => {
     plazoGrid.forEach(p => {
       const van = calcVANobj(f, p, v.tarifa, v);
@@ -1228,7 +1232,7 @@ function buildObjChart(vanObj, v, solFlota, solPlazo) {
       y: {
         type: 'linear',
         title: {display: true, text: 'Flota (buses)', color: '#8a8799', font: {size: 11}},
-        min: 0, max: 220,
+        min: 0, max: 2100,
         ticks: {color: '#55536a', font: {size: 11}},
         grid: {color: 'rgba(255,255,255,0.04)'},
         border: {color: 'rgba(255,255,255,0.06)'}
@@ -1246,6 +1250,7 @@ function buildObjChart(vanObj, v, solFlota, solPlazo) {
 
 // Bind objetivo slider
 document.getElementById('sl-van-objetivo')?.addEventListener('input',updateObjetivo);
+document.getElementById('obj-tarifa-input')?.addEventListener('input',updateObjetivo);
 </script>
 </body>
 </html>
